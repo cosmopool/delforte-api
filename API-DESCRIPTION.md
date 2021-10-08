@@ -3,52 +3,67 @@
 ## Client
 Manage client main information.
 
-### Get client info
+#### Get client info
 __GET__ | `/clients/{client_id}/`
+Get info on a specific client.
 
-### Add client
+#### Add client
 __POST__ | `/clients/`
+Add a new client.
 
-### Edit client
+#### Edit client
 __PATCH__ | `/clients/{client_id}/`
+Edit a specific client.
 
-### Remove client
+#### Remove client
 __DELETE__ | `/clients/{client_id}/`
+Delete a specific client.
 
 ---
+
+
 ## Address
 Manage specific client addresses.
 
-### Add address
+#### Add address
 __POST__ | `/clients/{client_id}/address`
 Add address to a specific client.
 
-### Remove address
+---
+#### Remove address
 __DELETE__ | `/clients/{client_id}/address`
 Remove address from a specific client.
 
-### Edit address
+---
+#### Edit address
 __PATCH__ | `/clients/{client_id}/address`
 Edit address from a specific client.
 
 ---
+
+
+
 `TODO: Phones will not be implemented in api V1`
 ## Phones
 Manage specific client phone numbers.
 
-### List all phone numbers
+---
+#### List all phone numbers
 __GET__ | `/clients/{client_id}/phone/`
 List all phone numbers from a specific client.
 
-### Add phone number
+---
+#### Add phone number
 __POST__ | `/clients/{client_id}/phone/`
 Add a phone number to a specific client.
 
-### Edit phone number
+---
+#### Edit phone number
 __PATCH__ | `/clients/{client_id}/phone/{phone_id}`
 Edit a phone number from a specific client.
 
-### Remove phone number
+---
+#### Remove phone number
 __DELETE__ | `/clients/{client_id}/phone/{phone_id}`
 Delete a specific phone number from a specific client.
 
@@ -56,56 +71,68 @@ Delete a specific phone number from a specific client.
 `TODO: History will not be implemented in api V1`
 ## History
 Get information specific client appointments/tickets history.
-### Get info on appointments history
-### Get info on tickets history
+#### Get info on appointments history
+#### Get info on tickets history
 
 ---
 # Tickets
 
-### Open ticket
+---
+#### Open ticket
 __POST__ |`/tickets/`
 Open a new ticket
 
-### Get ticket info
+---
+#### Get ticket info
 __GET__ |`/tickets/{ticket_id}/`
 Get information about a specific ticket
 
-### Close ticket
+---
+#### Close ticket
 __POST__ |`/tickets/{ticket_id}/actions/close/`
 Close a open ticket
 
-### Edit ticket
+---
+#### Edit ticket
 __PATCH__ |`/tickets/{ticket_id}/`
 Edit a specific ticket
 
-### Delete ticket
+---
+#### Delete ticket
 __DELETE__ |`/tickets/{ticket_id}/`
 Delete a specific ticket
 
 ---
 # Appointments
 
-### Book appointment
+---
+#### Book appointment
 __POST__ |`/tickets/`
 Book a new appointment.
 
-### Get appointment info
+---
+#### Get appointment info
 __GET__ |`/appointments/{appointment_id}/`
 Get info on a specific appointment.
 
-### Close appointment
+---
+#### Close appointment
 __POST__ |`/appointments/{appointment_id}/actions/close/`
 Close a specific appointment.
 
-### Edit appointment
+---
+#### Edit appointment
 __PATCH__ |`/appointments/{appointment_id}/`
 Edit a specific appointment.
 
-### Delete appointment
+---
+#### Delete appointment
 __DELETE__ |`/appointments/{appointment_id}/`
 Delete a specific appointment.
 
-### Reschedule appointment
+---
+#### Reschedule appointment
 __POST__ |`/appointments/{appointment_id}/actions/reschedule/`
 Reschedule a specific appointment to a new date.
 
+---
