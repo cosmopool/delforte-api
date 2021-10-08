@@ -1,7 +1,10 @@
 import os
 import pytest
-from authentication import basic_autentication as Auth
+import authentication.basic_authentication as Auth
 
+# TODO: check if there is api_key value in header
 
-def test_check_api_key_on_request_header():
-    assert Auth.is_authenticated == 1
+def test_check_api_is_valid():
+    """ Basic implementation of authentication. """
+    # TODO: implement a better authentication check
+    assert Auth.is_authenticated() == True
