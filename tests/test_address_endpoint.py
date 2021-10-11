@@ -3,9 +3,6 @@ import requests
 
 # configuration of api base url
 ENDPOINT = "address"
-API_VERSION = os.environ.get("API_VERSION")
-BASE_URL = os.environ.get("BASE_URL")
-API_URL = f"{BASE_URL}v{API_VERSION}/{ENDPOINT}/"
 
 # http method should be GET, POST, DELETE, PUT
 # 405 not implemented if any other http verb
