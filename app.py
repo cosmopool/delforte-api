@@ -1,32 +1,18 @@
-from flask import Flask, request, jsonify, make_response
-import appointments.server_config as CONFIG
-import os
+from flask import Flask
+from flask_restful import Resource, Api
+
+from db import db
 
 app = Flask(__name__)
+api = Api(app)
 
-CONFIG.endpoint = "login"
-BASE_URL = CONFIG.API_URL
-URL = CONFIG.API_URL
-
-@app.route('/v1/login')
-def login():
-
-    # if username == "kaio" and password == "mypass":
-    #     return jsonify({ "message" : "OK", "api-token": "test_token" })
-    # else:
-    #     return "Send login info."
-
-    # from ipdb import set_trace; set_trace()
-    auth = request.authorization
-
-    if auth and auth.password == "mypass":
-        response = make_response('Successfull login', 200, { 'api-token': 'test_00019' })
-        #from ipdb import set_trace; set_trace()
-        return response
-
-  
-    #from ipdb import set_trace; set_trace()
-    return make_response('Invalid credentials', 401, { 'WWW-Authenticate' : 'Basic realm="Login required"' })
+api.add_resource(TicketOpen, "/tickets")
+api.add_resource(Tickets, "/tickets/<string:id>")
+api.add_resource(TicketsActionsClose, "/tickets/<string:id>/actions/close")
+api.add_resource(Appointments, "/appointments/<string:id>")
+api.add_resource(AppointmentsActionsClose, "/appointments/<string:id>/actions/close")
+api.add_resource(AppointmentsActionsReschedule, "/appointments/<string:id>/actions/reschedule")
 
 if __name__ == '__main__':
+    db.init_app(app)
     app.run()
