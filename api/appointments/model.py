@@ -1,18 +1,20 @@
-# from db import db
+import datetime
 from flask_sqlalchemy import SQLAlchemy
+from marshmallow import Schema, fields
 
-db = SQLAlchemy()
+class AppointmentModel():
+    def __init__(self, date, time, duration, ticket_id, is_finished):
+        self.id = self.new_id()
+        self.date = date
+        self.time = time
+        self.duration = duration
+        self.ticket_id = ticket_id
+        self.is_finished = is_finished
 
-class AppointmentModel(db.Model):
-    __tablename__ = 'appointments'
-
-    id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.DateTime)
-    time = db.Column(db.DateTime)
-    duration = db.Column(db.Integer)
-    ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id'), nullable=False)
-    is_finished = db.Column(db.Boolean)
-    
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
+class AppointmentSchema(Schema):
+    id = fields.Integer()
+    date = fields.Date(required=True)
+    time = fields.Time(required=True)
+    duration = fields.Str(required=True)
+    ticket_id = fields.Integer(required=True)
+    is_finished = fields.Boolean(default=False)
