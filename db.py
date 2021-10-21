@@ -70,6 +70,7 @@ def select(table, dict):
 
         if len(result) == 0:
             raise KeyError(" No record found with given id.")
+        # print(f"-------------------------- result: { result }")
         return result
     else:
         raise DataBaseImplementationError("Need to implement SELECT function with more than 1 conditional.")
@@ -129,10 +130,10 @@ def auth_user(table=None, dict=None, user_id=None):
         value = "".join(dict.values())
         # query = f"SELECT id FROM { table } WHERE { column } = crypt('{ value }', password)"
         query = f"SELECT row_to_json(users) FROM { table } WHERE username = \'{ username }\' AND password = crypt('{ password }', password)"
-        print(f"----------------------- 1 query: { query }")
+        # print(f"----------------------- 1 query: { query }")
     elif user_id and not (table and dict):
         query = f"SELECT row_to_json(users) FROM users WHERE id = { user_id }"
-        print(f"----------------------- 2 query: { query }")
+        # print(f"----------------------- 2 query: { query }")
     else:
         return "no valid input"
     # print(query)

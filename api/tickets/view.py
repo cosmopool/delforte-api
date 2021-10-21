@@ -1,10 +1,12 @@
-# import db
-from db import insert, select, delete, update
 from flask import request
 from flask_restful import Resource, reqparse
+from flask_jwt_extended import jwt_required
+
+from db import insert, select, delete, update
 from .model import TicketSchema
 
 class TicketOpen(Resource):
+    @jwt_required()
     def get(self):
         """ Get all open tickets """
         try:
@@ -17,6 +19,7 @@ class TicketOpen(Resource):
         finally:
             return {"open tickets": result}, http_status
 
+    @jwt_required()
     def post(self):
         """ Open a new ticket """
         schema = TicketSchema()
@@ -38,6 +41,7 @@ class TicketOpen(Resource):
             return {"message": result}, http_status
 
 class Tickets(Resource):
+    @jwt_required()
     def get(self, id):
         """ Get information about specific ticket """
         schema = TicketSchema()
@@ -55,6 +59,7 @@ class Tickets(Resource):
         finally:
             return {"message": result}, http_status
 
+    @jwt_required()
     def patch(self, id):
         """ Edit a specific ticket """
         schema = TicketSchema(partial=True)
@@ -80,6 +85,7 @@ class Tickets(Resource):
         finally:
             return {"message": result}, http_status
 
+    @jwt_required()
     def delete(self, id):
         """ Delete a specific ticket """
         schema = TicketSchema()
@@ -105,6 +111,7 @@ class Tickets(Resource):
             ticket.pop("id")
 
 class TicketsActionsClose(Resource):
+    @jwt_required()
     def post(self, id):
         """ Close a open ticket """
         schema = TicketSchema()
