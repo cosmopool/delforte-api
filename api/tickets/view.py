@@ -11,9 +11,9 @@ class TicketOpen(Resource):
         """ Get all open tickets """
         try:
             result = select("tickets", {"is_finished": "false"})
-        except:
+        except Exception as e:
             message = "Error"
-            result = "Something went wrong while searching your data"
+            result = ["Something went wrong while searching your data", e]
             http_status = 500
         else:
             message = "Open Tickets"
@@ -28,15 +28,16 @@ class TicketOpen(Resource):
 
         try:
             result = schema.load(request.json)
-        except:
-            result = "some fields have invalid data"
+        except Exception as e:
+            message = "Error"
+            result = str(e)
             http_status = 406
         else:
             try:
                 result = insert("tickets", result)
-            except:
+            except Exception as e:
                 message = "Error"
-                result = "something went wrong writing your data"
+                result = ["something went wrong writing your data", e]
                 http_status = 500
             else:
                 message = "Success"
@@ -51,13 +52,13 @@ class Tickets(Resource):
         schema = TicketSchema()
         try:
             result = select("tickets", {"id": id})
-        except KeyError:
+        except KeyError as e:
             message = "Error"
-            result = "no record found with given id"
+            result = ["No record found with given id", e]
             http_status = 400
-        except:
+        except Exception as e:
             message = "Error"
-            result = "something went wrong while searching your data"
+            result = ["Something went wrong while searching your data", e]
             http_status = 500
         else:
             message = "Message"
@@ -75,7 +76,7 @@ class Tickets(Resource):
             ticket = self.__val_ticket__(ticket, id)
         except ValueError:
             message = "Error"
-            result = "id do not match"
+            result = "Id do not match"
             http_status = 406
         except ValidationError:
             message = "Error"
@@ -83,7 +84,7 @@ class Tickets(Resource):
         else:
             try:
                 result = update("tickets", {"id": id}, ticket)
-            except:
+            except Exception as e:
                 message = "Error"
                 result = "value too long"
                 http_status = 409
@@ -128,9 +129,129 @@ class TicketsActionsClose(Resource):
         """ Close a open ticket """
         try:
             result = update("tickets", {"id": id}, {"is_finished": "true"})
-        except:
+        except Exception as e:
             message = "Error"
-            result = "Something went wrong"
+            result = ["Something went wrong while searching your data", e]
+            http_status = 500
+        else:
+            message = "Open Tickets"
+            http_status = 200
+        finally:
+            return {message: result}, http_status
+
+    @jwt_required()
+    def post(self):
+        """ Open a new ticket """
+        schema = TicketSchema()
+
+        try:
+            result = schema.load(request.json)
+        except Exception as e:
+            message = "Error"
+            result = str(e)
+            http_status = 406
+        else:
+            try:
+                result = insert("tickets", result)
+            except Exception as e:
+                message = "Error"
+                result = ["Something went wrong while searching your data", e]
+                http_status = 500
+            else:
+                message = "Success"
+                http_status = 200
+        finally:
+            return {"message": result}, http_status
+
+class Tickets(Resource):
+    @jwt_required()
+    def get(self, id):
+        """ Get information about specific ticket """
+        schema = TicketSchema()
+        try:
+            result = select("tickets", {"id": id})
+        except KeyError:
+            message = "Error"
+            result = "no record found with given id"
+            http_status = 400
+        except Exception as e:
+            message = "Error"
+            result = ["something went wrong while searching your data", e]
+            http_status = 500
+        else:
+            message = "Message"
+            result = schema.load(result[0])
+            http_status = 200
+        finally:
+            return {message: result}, http_status
+
+    @jwt_required()
+    def patch(self, id):
+        """ Edit a specific ticket """
+        schema = TicketSchema(partial=True)
+        ticket = schema.load(request.json)
+        try:
+            ticket = self.__val_ticket__(ticket, id)
+        except ValueError as e:
+            message = "Error"
+            result = str(e)
+            http_status = 406
+        except Exception as e:
+            message = "Error"
+            result = str(e)
+            http_status = 406
+        else:
+            try:
+                result = update("tickets", {"id": id}, ticket)
+            except Exception as e:
+                message = "Error"
+                result = ["Value too long", e]
+                http_status = 409
+            else:
+                message = "Message"
+                if result == 0:
+                    http_status = 406
+                else:
+                    http_status = 200
+        finally:
+            return {message: result}, http_status
+
+    @jwt_required()
+    def delete(self, id):
+        """ Delete a specific ticket """
+        result = delete("tickets", {"id": id})
+
+        if result == 0:
+            message = "Error"
+            result = "Nothing has been deleted"
+            http_status = 404
+        else:
+            message = "Success"
+            http_status = 200
+
+        return { message: result }, http_status
+
+    def __val_ticket__(self, ticket, id):
+        # validade ticket id and id
+        if str(ticket.get("id")) == str(id):
+            return ticket
+        else:
+            raise ValueError("Id do not match.")
+
+        if ticket.get("is_finished"):
+            ticket.pop("is_finished")
+        if ticket.get("id"):
+            ticket.pop("id")
+
+class TicketsActionsClose(Resource):
+    @jwt_required()
+    def post(self, id):
+        """ Close a open ticket """
+        try:
+            result = update("tickets", {"id": id}, {"is_finished": "true"})
+        except Exception as e:
+            message = "Error"
+            result = str(e)
             http_status = 500
         else:
             message = "Success"
