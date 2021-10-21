@@ -1,3 +1,5 @@
 venv
 envrc
 .envrc
+token.txt
+new_token.py

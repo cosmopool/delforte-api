@@ -57,7 +57,44 @@ class Appointments(Resource):
     @jwt_required()
     def patch(self,appointment_id):
         """ Edit a specific appointment """
-        pass
+        schema = AppointmentSchema(partial=True)
+        ticket = schema.load(request.json)
+        try:
+            appointment = self.__val_appointment__(appointment, id)
+        except ValueError:
+            message = "Error"
+            result = "Id do not match"
+            http_status = 406
+        except ValidationError:
+            message = "Error"
+            result = "Error validating your data"
+        else:
+            try:
+                result = update("appointments", {"id": id}, appointment)
+            except:
+                message = "Error"
+                result = "Value too long"
+                http_status = 409
+            else:
+                message = "Message"
+                if result == 0:
+                    http_status = 406
+                else:
+                    http_status = 200
+        finally:
+            return {message: result}, http_status
+
+    def __val_appointment__(self, ticket, id):
+        # validade ticket id and id
+        if str(ticket.get("id")) == str(id):
+            return ticket
+        else:
+            raise ValueError("Id do not match.")
+
+        if ticket.get("is_finished"):
+            ticket.pop("is_finished")
+        if ticket.get("id"):
+            ticket.pop("id")
 
     @jwt_required()
     def delete(self,appointment_id):
@@ -68,10 +105,34 @@ class AppointmentsActionsClose(Resource):
     @jwt_required()
     def post(self,appointment_id):
         """ Close a open appointment """
-        pass
+        try:
+            result = update("appointments", {"id": appointment_id}, {"is_finished": "true"})
+        except:
+            message = "Error"
+            result = "Something went wrong"
+            http_status = 500
+        else:
+            message = "Success"
+            http_status = 200
+        finally:
+            return {message: result}, http_status
 
 class AppointmentsActionsReschedule(Resource):
     @jwt_required()
-    def post(self,appointment_id):
+    def post(self, appointment_id):
         """ Reschedule a specific appointment to a new date """
-        pass
+        schema = AppointmentSchema(partial=True)
+        appointment = schema(request.json)
+
+        try:
+            # result = update("appointments", {"id": appointment_id}, appointment)
+            print(f"--------------------------- { appointment }")
+        except:
+            message = "Error"
+            result = "Something went wrong"
+            http_status = 500
+        else:
+            message = "Success"
+            http_status = 200
+        finally:
+            return {message: result}, http_status

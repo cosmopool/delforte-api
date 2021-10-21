@@ -1,4 +1,5 @@
 import db
+import os
 
 from flask import Flask
 from flask_restful import Resource, Api
@@ -11,7 +12,7 @@ from api.appointments.view import Appointments, AppointmentOpen, AppointmentsAct
 app = Flask(__name__)
 api = Api(app)
 
-app.config['JWT_SECRET_KEY'] = 'super-secret'
+app.config['JWT_SECRET_KEY'] = os.environ.get("SECRET")
 
 jwt = JWTManager(app)
 
