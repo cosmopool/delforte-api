@@ -10,9 +10,9 @@ class AppointmentOpen(Resource):
     def get(self):
         try:
             result = select("appointments", {"is_finished": "false"})
-        except:
+        except Exception as e:
             message = "Error"
-            result = "Something went wrong while searching your data"
+            result = ["Something went wrong while searching your data", e]
             http_status = 500
         else:
             message = "Open Appointments"
@@ -24,17 +24,22 @@ class AppointmentOpen(Resource):
     def post(self):
         """ Book a new appointment """
         schema = AppointmentSchema()
-        appointment = schema.load(request.json)
-
         try:
-            result = insert("appointments", appointment)
-        except:
+            appointment = schema.load(request.json)
+        except Exception as e:
             message = "Error"
-            result = "Something went wrong while searching your data"
-            http_status = 500
+            result = str(e)
+            http_status = 406
         else:
-            message = "Appointment booked"
-            http_status = 200
+            try:
+                result = insert("appointments", appointment)
+            except:
+                message = "Error"
+                result = "Something went wrong while searching your data"
+                http_status = 500
+            else:
+                message = "Appointment booked"
+                http_status = 200
         finally:
             return {message: result}, http_status
 
@@ -65,9 +70,10 @@ class Appointments(Resource):
             message = "Error"
             result = "Id do not match"
             http_status = 406
-        except ValidationError:
+        except Exception as e:
             message = "Error"
-            result = "Error validating your data"
+            result = e
+            http_status = 406
         else:
             try:
                 result = update("appointments", {"id": id}, appointment)
@@ -107,9 +113,9 @@ class AppointmentsActionsClose(Resource):
         """ Close a open appointment """
         try:
             result = update("appointments", {"id": appointment_id}, {"is_finished": "true"})
-        except:
+        except Exception as e:
             message = "Error"
-            result = "Something went wrong"
+            result = e
             http_status = 500
         else:
             message = "Success"
@@ -121,18 +127,25 @@ class AppointmentsActionsReschedule(Resource):
     @jwt_required()
     def post(self, appointment_id):
         """ Reschedule a specific appointment to a new date """
+        # print(f"------------------------------ {request.json}")
         schema = AppointmentSchema(partial=True)
-        appointment = schema(request.json)
-
         try:
-            # result = update("appointments", {"id": appointment_id}, appointment)
-            print(f"--------------------------- { appointment }")
-        except:
+            appointment = schema.load(request.json)
+        except Exception as e:
             message = "Error"
-            result = "Something went wrong"
-            http_status = 500
+            result = str(e)
+            http_status = 406
         else:
-            message = "Success"
-            http_status = 200
+            try:
+                result = update("appointments", {"id": appointment_id}, appointment)
+                print(f"--------------------------- { appointment }")
+            except Exception as e:
+                message = "Error"
+                # result = "Something went wrong"
+                result = str(e)
+                http_status = 500
+            else:
+                message = "Success"
+                http_status = 200
         finally:
             return {message: result}, http_status
