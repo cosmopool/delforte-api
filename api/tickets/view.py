@@ -12,12 +12,14 @@ class TicketOpen(Resource):
         try:
             result = select("tickets", {"is_finished": "false"})
         except:
-            result = "something went wrong searching your data"
+            message = "Error"
+            result = "Something went wrong while searching your data"
             http_status = 500
         else:
+            message = "Open Tickets"
             http_status = 200
         finally:
-            return {"open tickets": result}, http_status
+            return {message: result}, http_status
 
     @jwt_required()
     def post(self):
@@ -33,9 +35,11 @@ class TicketOpen(Resource):
             try:
                 result = insert("tickets", result)
             except:
+                message = "Error"
                 result = "something went wrong writing your data"
                 http_status = 500
             else:
+                message = "Success"
                 http_status = 200
         finally:
             return {"message": result}, http_status
@@ -48,16 +52,19 @@ class Tickets(Resource):
         try:
             result = select("tickets", {"id": id})
         except KeyError:
+            message = "Error"
             result = "no record found with given id"
             http_status = 400
         except:
+            message = "Error"
             result = "something went wrong while searching your data"
             http_status = 500
         else:
+            message = "Message"
             result = schema.load(result[0])
             http_status = 200
         finally:
-            return {"message": result}, http_status
+            return {message: result}, http_status
 
     @jwt_required()
     def patch(self, id):
@@ -67,23 +74,27 @@ class Tickets(Resource):
         try:
             ticket = self.__val_ticket__(ticket, id)
         except ValueError:
+            message = "Error"
             result = "id do not match"
             http_status = 406
         except ValidationError:
+            message = "Error"
             result = "error validating your data"
         else:
             try:
                 result = update("tickets", {"id": id}, ticket)
             except:
+                message = "Error"
                 result = "value too long"
                 http_status = 409
             else:
+                message = "Message"
                 if result == 0:
                     http_status = 406
                 else:
                     http_status = 200
         finally:
-            return {"message": result}, http_status
+            return {message: result}, http_status
 
     @jwt_required()
     def delete(self, id):
@@ -92,11 +103,13 @@ class Tickets(Resource):
         result = delete("tickets", {"id": id})
 
         if result == 0:
+            message = "Error"
             http_status = 404
         else:
+            message = "Message"
             http_status = 200
 
-        return { "message": result }, http_status
+        return { message: result }, http_status
 
     def __val_ticket__(self, ticket, id):
         # validade ticket id and id
@@ -115,4 +128,3 @@ class TicketsActionsClose(Resource):
     def post(self, id):
         """ Close a open ticket """
         schema = TicketSchema()
-        pass

@@ -11,11 +11,11 @@ class AppointmentOpen(Resource):
         try:
             result = select("appointments", {"is_finished": "false"})
         except:
-            message = "message"
-            result = "something went wrong searching your data"
+            message = "Error"
+            result = "Something went wrong while searching your data"
             http_status = 500
         else:
-            message = "open appointments"
+            message = "Open Appointments"
             http_status = 200
         finally:
             return {message: result}, http_status
@@ -26,24 +26,33 @@ class AppointmentOpen(Resource):
         schema = AppointmentSchema()
         appointment = schema.load(request.json)
 
-        result = insert("appointments", appointment)
-        return {"message": result}, 200
+        try:
+            result = insert("appointments", appointment)
+        except:
+            message = "Error"
+            result = "Something went wrong while searching your data"
+            http_status = 500
+        else:
+            message = "Appointment booked"
+            http_status = 200
+        finally:
+            return {message: result}, http_status
 
 class Appointments(Resource):
     @jwt_required()
     def get(self, appointment_id):
         """ Get information about specific appointment """
-        # print("hey")
         try:
             result = select("appointments", {"id": appointment_id})
         except:
-            result = "something went wrong searching your data"
+            message = "Error"
+            result = "Something went wrong while searching your data"
             http_status = 500
         else:
+            message = "Appointment"
             http_status = 200
         finally:
-            return result, http_status
-        pass
+            return {message: result}, http_status
 
     @jwt_required()
     def patch(self,appointment_id):
