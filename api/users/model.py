@@ -1,12 +1,13 @@
-# from db import db
-from flask_sqlalchemy import SQLAlchemy
+from marshmallow import Schema, fields
 
-db = SQLAlchemy()
+class UserModel():
+    def __init__(self, id, username, password):
+        self.id = id
+        self.username = username
+        self.password = password
 
-class UserModel(db.Model):
-    __tablename__ = 'users'
-
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80))
-    password = db.Column(db.Text)
+class UserSchema(Schema):
+    id = fields.Integer()
+    username = fields.Str()
+    password = fields.Str()
 

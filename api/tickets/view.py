@@ -1,4 +1,5 @@
-import db
+# import db
+from db import insert, select, delete, update
 from flask import request
 from flask_restful import Resource, reqparse
 from .model import TicketSchema
@@ -7,7 +8,7 @@ class TicketOpen(Resource):
     def get(self):
         """ Get all open tickets """
         try:
-            result = db.select("tickets", {"is_finished": "false"})
+            result = select("tickets", {"is_finished": "false"})
         except:
             result = "something went wrong searching your data"
             http_status = 500
@@ -27,7 +28,7 @@ class TicketOpen(Resource):
             http_status = 406
         else:
             try:
-                result = db.insert("tickets", result)
+                result = insert("tickets", result)
             except:
                 result = "something went wrong writing your data"
                 http_status = 500
@@ -41,7 +42,7 @@ class Tickets(Resource):
         """ Get information about specific ticket """
         schema = TicketSchema()
         try:
-            result = db.select("tickets", {"id": id})
+            result = select("tickets", {"id": id})
         except KeyError:
             result = "no record found with given id"
             http_status = 400
@@ -67,7 +68,7 @@ class Tickets(Resource):
             result = "error validating your data"
         else:
             try:
-                result = db.update("tickets", {"id": id}, ticket)
+                result = update("tickets", {"id": id}, ticket)
             except:
                 result = "value too long"
                 http_status = 409
@@ -82,7 +83,7 @@ class Tickets(Resource):
     def delete(self, id):
         """ Delete a specific ticket """
         schema = TicketSchema()
-        result = db.delete("tickets", {"id": id})
+        result = delete("tickets", {"id": id})
 
         if result == 0:
             http_status = 404

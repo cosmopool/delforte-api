@@ -118,3 +118,46 @@ def update(table, ticket_id, record):
         status = return_command_status(result.pgresult.command_status)
 
     return status
+
+def auth_user(table=None, dict=None, user_id=None):
+    """ Return a dictionaries of records """
+    result = []
+    if table and dict and not user_id:
+        password = str(dict.get("password"))
+        username = str(dict.get("username"))
+        column = "".join(dict.keys())
+        value = "".join(dict.values())
+        # query = f"SELECT id FROM { table } WHERE { column } = crypt('{ value }', password)"
+        query = f"SELECT row_to_json(users) FROM { table } WHERE username = \'{ username }\' AND password = crypt('{ password }', password)"
+        print(f"----------------------- 1 query: { query }")
+    elif user_id and not (table and dict):
+        query = f"SELECT row_to_json(users) FROM users WHERE id = { user_id }"
+        print(f"----------------------- 2 query: { query }")
+    else:
+        return "no valid input"
+    # print(query)
+
+    with psycopg.connect(CONNECTION) as conn:
+        selection = conn.execute(query).fetchall()
+
+        for record in selection:
+            # print(record)
+            if record != None:
+                result.append(record[0])
+
+    if len(result) == 0:
+        raise KeyError(" No record found with given id.")
+
+    return result
+
+def insertUser(table, dict):
+    columns = ", ".join(dict.keys())
+    dict_vals = tuple(dict.values())
+    values = (dict_vals[0], f"crypt(\'{dict_vals[1]}\', gen_salt(\'bf\'))")
+    query = f"INSERT INTO {table} ({columns}) VALUES (%s, crypt(%s, gen_salt('bf')))"
+
+    with psycopg.connect(CONNECTION) as conn:
+        result = conn.execute(query, values).pgresult.command_status
+
+    return return_command_status(result)
+

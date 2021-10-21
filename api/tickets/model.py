@@ -1,8 +1,4 @@
-# from db import db
-from flask_sqlalchemy import SQLAlchemy
 from marshmallow import Schema, fields
-
-from .records import tickets
 
 class TicketModel():
     def __init__(self, id, client_name, client_phone, service_type, description, is_finished):
@@ -13,9 +9,6 @@ class TicketModel():
         self.service_type = service_type
         self.description = description
         self.is_finished = is_finished
-
-    def __gen_id__(self, list):
-        return len(list) + 1
 
 class TicketSchema(Schema):
     id = fields.Integer()
