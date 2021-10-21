@@ -33,9 +33,9 @@ class AppointmentOpen(Resource):
         else:
             try:
                 result = insert("appointments", appointment)
-            except:
+            except Exception as e:
                 message = "Error"
-                result = "Something went wrong while searching your data"
+                result = ["Something went wrong while searching your data", e]
                 http_status = 500
             else:
                 message = "Appointment booked"
@@ -49,9 +49,9 @@ class Appointments(Resource):
         """ Get information about specific appointment """
         try:
             result = select("appointments", {"id": appointment_id})
-        except:
+        except Exception as e:
             message = "Error"
-            result = "Something went wrong while searching your data"
+            result = ["Something went wrong while searching your data", e]
             http_status = 500
         else:
             message = "Appointment"
@@ -72,14 +72,14 @@ class Appointments(Resource):
             http_status = 406
         except Exception as e:
             message = "Error"
-            result = e
+            result = str(e)
             http_status = 406
         else:
             try:
                 result = update("appointments", {"id": id}, appointment)
-            except:
+            except Exception as e:
                 message = "Error"
-                result = "Value too long"
+                result = ["Value too long", e]
                 http_status = 409
             else:
                 message = "Message"
@@ -115,7 +115,7 @@ class AppointmentsActionsClose(Resource):
             result = update("appointments", {"id": appointment_id}, {"is_finished": "true"})
         except Exception as e:
             message = "Error"
-            result = e
+            result = str(e)
             http_status = 500
         else:
             message = "Success"
