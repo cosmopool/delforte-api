@@ -7,35 +7,39 @@ from .model import UserSchema
 class UserAuthenticate(Resource):
     def get(self):
         schema = UserSchema()
-        credentials = schema.load(request.json)
-
         try:
-            result = auth_user("users", credentials)
-        except:
-            message = "message"
-            result = "Something went wrong while login"
-            http_status = 500
+            credentials = schema.load(request.json)
+        except Exception as e:
+            message = "Error"
+            result = str(e)
+            http_status = 406
         else:
-            message = "access token"
-            result = create_access_token(identity=result[0].get("username"))
-            http_status = 200
+            try:
+                result = auth_user("users", credentials)
+            except Exception as e:
+                message = "Error"
+                result = ["Something went wrong while login", e]
+                http_status = 500
+            else:
+                message = "Access token"
+                result = create_access_token(identity=result[0].get("username"))
+                http_status = 200
         finally:
             return {message: result}, http_status
-
-    def __authentication__(self, user):
-        pass
-    
-    def __identity__(self):
-        pass
 
 class User(Resource):
     @jwt_required()
     def post(self):
         schema = UserSchema()
-        user = schema.load(request.json)
 
-        result = insertUser("users", user)
-        return result
+        try:
+            user = schema.load(request.json)
+        except Exception as e:
+            print(e)
+            return str(e)
+        else:
+            result = insertUser("users", user)
+            return result
 
     @jwt_required()
     def get(self):
@@ -45,5 +49,10 @@ class User(Resource):
 class Users(Resource):
     @jwt_required()
     def get(self, user_id):
-        result = auth_user(user_id=user_id)
-        return result
+        try:
+            result = auth_user(user_id=user_id)
+        except Exception as e:
+            print(e)
+            return str(e)
+        else:
+            return result
