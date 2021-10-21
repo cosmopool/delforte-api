@@ -36,7 +36,7 @@ class User(Resource):
             user = schema.load(request.json)
         except Exception as e:
             print(e)
-            return str(e)
+            raise Exception(e)
         else:
             result = insertUser("users", user)
             return result
@@ -53,6 +53,6 @@ class Users(Resource):
             result = auth_user(user_id=user_id)
         except Exception as e:
             print(e)
-            return str(e)
+            raise Exception(e)
         else:
             return result
