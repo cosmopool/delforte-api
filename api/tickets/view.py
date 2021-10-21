@@ -99,7 +99,6 @@ class Tickets(Resource):
     @jwt_required()
     def delete(self, id):
         """ Delete a specific ticket """
-        schema = TicketSchema()
         result = delete("tickets", {"id": id})
 
         if result == 0:
@@ -127,4 +126,14 @@ class TicketsActionsClose(Resource):
     @jwt_required()
     def post(self, id):
         """ Close a open ticket """
-        schema = TicketSchema()
+        try:
+            result = update("tickets", {"id": id}, {"is_finished": "true"})
+        except:
+            message = "Error"
+            result = "Something went wrong"
+            http_status = 500
+        else:
+            message = "Success"
+            http_status = 200
+        finally:
+            return {message: result}, http_status
