@@ -1,4 +1,3 @@
-venv
 envrc
 .envrc
 token.txt
@@ -6,3 +5,9 @@ new_token.py
 appointments-api-v1-database.sql
 __pycache__
 api.egg-info/
+api/appointments/__pycache__
+api/tickets/__pycache__
+api/users/__pycache__
+api/__pycache__
+
+
