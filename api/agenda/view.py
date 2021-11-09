@@ -9,7 +9,7 @@ class Agenda(Resource):
     @jwt_required()
     def get(self):
         try:
-            result = select(("appointments", "tickets", ), {"is_finished": "false"})
+            result = select(("appointments", "tickets"), {"is_finished": "false"})
         except Exception as e:
             message = "Error"
             result = ["Something went wrong while searching your data", e]

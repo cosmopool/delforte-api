@@ -58,10 +58,11 @@ def select(table, dict):
     result = []
     if type(table) == type(()):
         # TODO: code real implementation to UNION
-        column = dict.keys()
-        value = dict.values()
+        # column = dict.keys()
+        # value = dict.values()
         # query = f"SELECT row_to_json({ table[0] }) FROM { table[0] } WHERE { column[0] } = { value[0] } UNION SELECT row_to_json({ table[1] }) FROM { table[1] } WHERE { column[1] } = { value[1] }"
         # query = f"SELECT row_to_json({ table[0] }) FROM { table[0] } WHERE ticket_id = { value[0] } UNION SELECT row_to_json({ table[1] }) FROM { table[1] } WHERE { column[1] } = { value[1] }"
+        # TODO: need to filer records that is not finished yet. right now, it prints every record
         query = f"SELECT row_to_json(app_tck) FROM (SELECT tickets.client_name, tickets.client_phone, tickets.service_type, tickets.description, appointments.date, appointments.time, appointments.duration, appointments.is_finished FROM appointments INNER JOIN tickets ON appointments.ticket_id = tickets.id) AS app_tck;"
 
     elif len(dict.keys()) == 1:
@@ -70,18 +71,17 @@ def select(table, dict):
         query = f"SELECT row_to_json({ table }) FROM { table } WHERE { column } = { value }"
         print(query)
 
-        with psycopg.connect(CONNECTION) as conn:
-            selection = conn.execute(query).fetchall()
-            for record in selection:
-                if record != None:
-                    result.append(record[0])
+    with psycopg.connect(CONNECTION) as conn:
+        selection = conn.execute(query).fetchall()
+        for record in selection:
+            if record != None:
+                result.append(record[0])
 
-        if len(result) == 0:
-            raise KeyError(" No record found with given id.")
-        # print(f"-------------------------- result: { result }")
-        return result
-    else:
-        raise DataBaseImplementationError("Need to implement SELECT function with more than 1 conditional.")
+    if len(result) == 0:
+        raise KeyError(" No record found with given id.")
+
+    print(f"-------------------------- result: { result }")
+    return result
 
 def return_command_status(byte):
     byte_to_str = ''.join(map(chr, byte))
