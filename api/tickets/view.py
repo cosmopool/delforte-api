@@ -10,7 +10,7 @@ class TicketOpen(Resource):
     def get(self):
         """ Get all open tickets """
         try:
-            result = select("tickets", {"is_finished": "false"})
+            result = select("tickets", {"is_finished": "= false"})
         except Exception as e:
             message = "Error"
             result = ["Something went wrong while searching your data", e]
