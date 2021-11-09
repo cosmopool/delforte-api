@@ -70,7 +70,7 @@ def select(table, dict):
         column = "".join(dict.keys())
         value = "".join(dict.values())
         query = f"SELECT row_to_json({ table }) FROM { table } WHERE { column } { value }"
-        print(query)
+        # print(query)
 
     # print(f"-------------------------------------------------- here: { query }")
     with psycopg.connect(CONNECTION) as conn:
@@ -78,9 +78,9 @@ def select(table, dict):
         for record in selection:
             if record != None:
                 result.append(record[0])
-        print(f"-------------------------------------------------- here: { selection }")
-        print(f"-------------------------------------------------- here: { record }")
-        print(f"-------------------------------------------------- here: { query }")
+        # print(f"-------------------------------------------------- here: { selection }")
+        # print(f"-------------------------------------------------- here: { record }")
+        # print(f"-------------------------------------------------- here: { query }")
 
     if len(result) == 0:
         raise KeyError(" No record found with given id.")
