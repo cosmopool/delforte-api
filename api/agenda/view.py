@@ -5,17 +5,17 @@ from flask_jwt_extended import jwt_required
 from db import insert, select, delete, update
 from .model import AppointmentSchema
 
-class AppointmentOpen(Resource):
+class Agenda(Resource):
     @jwt_required()
     def get(self):
         try:
-            result = select("appointments", {"is_finished": "false"})
+            result = select(("appointments", "tickets", ), {"is_finished": "false"})
         except Exception as e:
             message = "Error"
             result = ["Something went wrong while searching your data", e]
             http_status = 500
         else:
-            message = "Open Appointments"
+            message = "Agenda"
             http_status = 200
         finally:
             return {message: result}, http_status

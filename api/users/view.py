@@ -9,6 +9,7 @@ class UserAuthenticate(Resource):
         schema = UserSchema()
         try:
             credentials = schema.load(request.json)
+            # print(f"--------------------------- credentials: {credentials}")
         except Exception as e:
             message = "Error"
             result = str(e)

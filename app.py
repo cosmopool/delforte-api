@@ -8,6 +8,7 @@ from flask_jwt_extended import JWTManager
 from api.users.view import User, Users, UserAuthenticate
 from api.tickets.view import TicketOpen, Tickets, TicketsActionsClose
 from api.appointments.view import Appointments, AppointmentOpen, AppointmentsActionsClose, AppointmentsActionsReschedule
+from api.agenda.view import Agenda
 
 app = Flask(__name__)
 api = Api(app)
@@ -15,6 +16,8 @@ api = Api(app)
 app.config['JWT_SECRET_KEY'] = os.environ.get("SECRET")
 
 jwt = JWTManager(app)
+
+api.add_resource(Agenda, "/agenda")
 
 api.add_resource(TicketOpen, "/tickets")
 api.add_resource(Tickets, "/tickets/<string:id>")
