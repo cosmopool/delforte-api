@@ -19,7 +19,7 @@ class TicketOpen(Resource):
             message = "Open Tickets"
             http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status
 
     @jwt_required()
     def post(self):
@@ -65,7 +65,7 @@ class Tickets(Resource):
             result = schema.load(result[0])
             http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status
 
     @jwt_required()
     def patch(self, id):
@@ -95,7 +95,7 @@ class Tickets(Resource):
                 else:
                     http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status
 
     @jwt_required()
     def delete(self, id):
@@ -137,7 +137,7 @@ class TicketsActionsClose(Resource):
             message = "Open Tickets"
             http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status
 
     @jwt_required()
     def post(self):
@@ -183,7 +183,7 @@ class Tickets(Resource):
             result = schema.load(result[0])
             http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status
 
     @jwt_required()
     def patch(self, id):
@@ -214,7 +214,7 @@ class Tickets(Resource):
                 else:
                     http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status
 
     @jwt_required()
     def delete(self, id):
@@ -257,4 +257,4 @@ class TicketsActionsClose(Resource):
             message = "Success"
             http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status

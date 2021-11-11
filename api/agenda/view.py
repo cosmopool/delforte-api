@@ -18,5 +18,5 @@ class Agenda(Resource):
             message = "Agenda"
             http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status
 

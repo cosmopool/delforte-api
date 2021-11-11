@@ -26,7 +26,7 @@ class UserAuthenticate(Resource):
                 result = create_access_token(identity=result[0].get("username"))
                 http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status
 
 class User(Resource):
     @jwt_required()

@@ -19,7 +19,7 @@ class AppointmentOpen(Resource):
             message = "Open Appointments"
             http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status
 
     @jwt_required()
     def post(self):
@@ -42,7 +42,7 @@ class AppointmentOpen(Resource):
                 message = "Appointment booked"
                 http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status
 
 class Appointments(Resource):
     @jwt_required()
@@ -58,7 +58,7 @@ class Appointments(Resource):
             message = "Appointment"
             http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status
 
     @jwt_required()
     def patch(self,appointment_id):
@@ -89,7 +89,7 @@ class Appointments(Resource):
                 else:
                     http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status
 
     def __val_appointment__(self, ticket, id):
         # validade ticket id and id
@@ -122,7 +122,7 @@ class AppointmentsActionsClose(Resource):
             message = "Success"
             http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status
 
 class AppointmentsActionsReschedule(Resource):
     @jwt_required()
@@ -149,4 +149,4 @@ class AppointmentsActionsReschedule(Resource):
                 message = "Success"
                 http_status = 200
         finally:
-            return {message: result}, http_status
+            return {"Status": message, "Result": result}, http_status
