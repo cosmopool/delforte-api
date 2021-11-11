@@ -22,7 +22,7 @@ class UserAuthenticate(Resource):
                 result = ["Something went wrong while login", e]
                 http_status = 500
             else:
-                message = "Access token"
+                message = "Success"
                 result = create_access_token(identity=result[0].get("username"))
                 http_status = 200
         finally:

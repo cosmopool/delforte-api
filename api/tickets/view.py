@@ -16,7 +16,7 @@ class TicketOpen(Resource):
             result = ["Something went wrong while searching your data", e]
             http_status = 500
         else:
-            message = "Open Tickets"
+            message = "Success"
             http_status = 200
         finally:
             return {"Status": message, "Result": result}, http_status
@@ -61,7 +61,7 @@ class Tickets(Resource):
             result = ["Something went wrong while searching your data", e]
             http_status = 500
         else:
-            message = "Message"
+            message = "Success"
             result = schema.load(result[0])
             http_status = 200
         finally:
@@ -89,7 +89,7 @@ class Tickets(Resource):
                 result = "value too long"
                 http_status = 409
             else:
-                message = "Message"
+                message = "Success"
                 if result == 0:
                     http_status = 406
                 else:
@@ -106,7 +106,7 @@ class Tickets(Resource):
             message = "Error"
             http_status = 404
         else:
-            message = "Message"
+            message = "Success"
             http_status = 200
 
         return { message: result }, http_status
@@ -134,7 +134,7 @@ class TicketsActionsClose(Resource):
             result = ["Something went wrong while searching your data", e]
             http_status = 500
         else:
-            message = "Open Tickets"
+            message = "Success"
             http_status = 200
         finally:
             return {"Status": message, "Result": result}, http_status
@@ -179,7 +179,7 @@ class Tickets(Resource):
             result = ["something went wrong while searching your data", e]
             http_status = 500
         else:
-            message = "Message"
+            message = "Success"
             result = schema.load(result[0])
             http_status = 200
         finally:
@@ -208,7 +208,7 @@ class Tickets(Resource):
                 result = ["Value too long", e]
                 http_status = 409
             else:
-                message = "Message"
+                message = "Success"
                 if result == 0:
                     http_status = 406
                 else:

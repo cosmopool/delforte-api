@@ -15,7 +15,7 @@ class Agenda(Resource):
             result = ["Something went wrong while searching your data", e]
             http_status = 500
         else:
-            message = "Agenda"
+            message = "Success"
             http_status = 200
         finally:
             return {"Status": message, "Result": result}, http_status

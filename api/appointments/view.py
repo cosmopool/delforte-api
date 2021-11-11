@@ -55,7 +55,7 @@ class Appointments(Resource):
             result = ["Something went wrong while searching your data", e]
             http_status = 500
         else:
-            message = "Appointment"
+            message = "Success"
             http_status = 200
         finally:
             return {"Status": message, "Result": result}, http_status
@@ -83,7 +83,7 @@ class Appointments(Resource):
                 result = ["Value too long", e]
                 http_status = 409
             else:
-                message = "Message"
+                message = "Success"
                 if result == 0:
                     http_status = 406
                 else:
