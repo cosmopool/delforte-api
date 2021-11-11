@@ -8,6 +8,7 @@ from .model import AppointmentSchema
 class AppointmentOpen(Resource):
     @jwt_required()
     def get(self):
+        """ get all open appointments """
         try:
             result = select("appointments", {"id": "> 0"})
         except Exception as e:
@@ -18,7 +19,7 @@ class AppointmentOpen(Resource):
             message = "Open Appointments"
             http_status = 200
         finally:
-            return {message: str(result)}, http_status
+            return {message: result}, http_status
 
     @jwt_required()
     def post(self):
