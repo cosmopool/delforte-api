@@ -46,12 +46,13 @@ def insert(table, dict):
     columns = ", ".join(dict.keys())
     values = tuple(dict.values())
 
-    query = f"INSERT INTO {table} ({columns}) VALUES ({str_values(dict)})"
+    query = f"WITH entry AS (INSERT INTO {table} ({columns}) VALUES ({str_values(dict)}) RETURNING id) SELECT row_to_json(entry) FROM entry"
 
     with psycopg.connect(CONNECTION) as conn:
-        result = conn.execute(query, values).pgresult.command_status
+        result = conn.execute(query, values).fetchall()
 
-    return return_command_status(result)
+    print(result[0][0])
+    return result[0][0]['id']
 
 def select(table, dict):
     """ Return a dictionaries of records """
