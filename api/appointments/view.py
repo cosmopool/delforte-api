@@ -64,23 +64,18 @@ class Appointments(Resource):
     def patch(self,appointment_id):
         """ Edit a specific appointment """
         schema = AppointmentSchema(partial=True)
-        ticket = schema.load(request.json)
         try:
-            appointment = self.__val_appointment__(appointment, id)
-        except ValueError:
-            message = "Error"
-            result = "Id do not match"
-            http_status = 406
+            appointment = schema.load(request.json)
         except Exception as e:
             message = "Error"
-            result = str(e)
+            result = f"Error parsin JSON: {str(e)}"
             http_status = 406
         else:
             try:
-                result = update("appointments", {"id": id}, appointment)
+                result = update("appointments", {"id": appointment_id}, appointment)
             except Exception as e:
-                message = "Error"
-                result = ["Value too long", e]
+                message = "Error 3"
+                result = f"Error updating record: {e}"
                 http_status = 409
             else:
                 message = "Success"
@@ -91,17 +86,21 @@ class Appointments(Resource):
         finally:
             return {"Status": message, "Result": result}, http_status
 
-    def __val_appointment__(self, ticket, id):
+    def __val_appointment__(self, dict, id):
         # validade ticket id and id
-        if str(ticket.get("id")) == str(id):
-            return ticket
-        else:
-            raise ValueError("Id do not match.")
+        # n_dict = dict
+        # if str(dict.get("id")) == str(id):
+        #     return dict
+        # else:
+        #     raise ValueError("Id do not match.")
 
-        if ticket.get("is_finished"):
-            ticket.pop("is_finished")
-        if ticket.get("id"):
-            ticket.pop("id")
+        # if dict.get("is_finished"):
+        #     dict.pop("is_finished")
+        # if dict.get("id"):
+        #     dict.pop("id")
+
+        # return dict
+        pass
 
     @jwt_required()
     def delete(self,appointment_id):
@@ -139,10 +138,9 @@ class AppointmentsActionsReschedule(Resource):
         else:
             try:
                 result = update("appointments", {"id": appointment_id}, appointment)
-                print(f"--------------------------- { appointment }")
+                # print(f"--------------------------- { appointment }")
             except Exception as e:
                 message = "Error"
-                # result = "Something went wrong"
                 result = str(e)
                 http_status = 500
             else:

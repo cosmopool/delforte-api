@@ -43,7 +43,7 @@ class TicketOpen(Resource):
                 message = "Success"
                 http_status = 200
         finally:
-            return {"message": result}, http_status
+            return {"Status": message, "Result": result}, http_status
 
 class Tickets(Resource):
     @jwt_required()
@@ -74,6 +74,8 @@ class Tickets(Resource):
         ticket = schema.load(request.json)
         try:
             ticket = self.__val_ticket__(ticket, id)
+            for e in ticket:
+                print(e, type(e))
         except ValueError:
             message = "Error"
             result = "Id do not match"
@@ -109,7 +111,7 @@ class Tickets(Resource):
             message = "Success"
             http_status = 200
 
-        return { message: result }, http_status
+        return {"Status": message, "Result": result}, http_status
 
     def __val_ticket__(self, ticket, id):
         # validade ticket id and id
@@ -161,7 +163,7 @@ class TicketsActionsClose(Resource):
                 message = "Success"
                 http_status = 200
         finally:
-            return {"message": result}, http_status
+            return {"Status": message, "Result": result}, http_status
 
 class Tickets(Resource):
     @jwt_required()
@@ -229,7 +231,7 @@ class Tickets(Resource):
             message = "Success"
             http_status = 200
 
-        return { message: result }, http_status
+        return {"Status": message, "Result": result}, http_status
 
     def __val_ticket__(self, ticket, id):
         # validade ticket id and id

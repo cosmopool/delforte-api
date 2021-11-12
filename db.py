@@ -64,7 +64,7 @@ def select(table, dict):
         # query = f"SELECT row_to_json({ table[0] }) FROM { table[0] } WHERE { column[0] } = { value[0] } UNION SELECT row_to_json({ table[1] }) FROM { table[1] } WHERE { column[1] } = { value[1] }"
         # query = f"SELECT row_to_json({ table[0] }) FROM { table[0] } WHERE ticket_id = { value[0] } UNION SELECT row_to_json({ table[1] }) FROM { table[1] } WHERE { column[1] } = { value[1] }"
         # TODO: need to filer records by *dict* argument. right now, it prints every record
-        query = f"SELECT row_to_json(app_tck) FROM (SELECT tickets.client_name, tickets.client_phone, tickets.client_address, tickets.service_type, tickets.description, appointments.date, appointments.time, appointments.duration, appointments.id, tickets.is_finished FROM appointments INNER JOIN tickets ON appointments.ticket_id = tickets.id) AS app_tck;"
+        query = f"SELECT row_to_json(app_tck) FROM (SELECT tickets.client_name, tickets.client_phone, tickets.client_address, tickets.service_type, tickets.description, appointments.date, appointments.time, appointments.duration, appointments.id, appointments.ticket_id, tickets.is_finished FROM appointments INNER JOIN tickets ON appointments.ticket_id = tickets.id) AS app_tck;"
         # print(f"-------------------------------------------------- here")
 
     elif len(dict.keys()) == 1:
