@@ -4,7 +4,7 @@
 !_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
 !_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
 !_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
-!_TAG_PROC_CWD	/home/files/king_hd1/Development/delforte-api/	//
+!_TAG_PROC_CWD	/home/files/king1/Development/delforte-api/	//
 !_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
 !_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
 !_TAG_PROGRAM_URL	https://ctags.io/	/official site/
@@ -49,6 +49,7 @@ AT	venv/lib/python3.6/site-packages/pip/_vendor/packaging/requirements.py	/^AT =
 AT	venv/lib/python3.6/site-packages/pkg_resources/_vendor/packaging/requirements.py	/^AT = L("@").suppress()$/;"	v
 AT	venv/lib/python3.6/site-packages/setuptools/_vendor/packaging/requirements.py	/^AT = L("@").suppress()$/;"	v
 AUTH_OK	venv/lib/python3.6/site-packages/psycopg/pq/_enums.py	/^    AUTH_OK = auto()$/;"	v	class:ConnStatus
+AUTH_USER	api/db/model.py	/^    AUTH_USER = auto()$/;"	v	class:QueryType
 AUTO	venv/lib/python3.6/site-packages/psycopg/_enums.py	/^    AUTO = "s"$/;"	v	class:PyFormat
 AWAITING_RESPONSE	venv/lib/python3.6/site-packages/psycopg/pq/_enums.py	/^    AWAITING_RESPONSE = auto()$/;"	v	class:ConnStatus
 AWARENESS	venv/lib/python3.6/site-packages/marshmallow/fields.py	/^    AWARENESS = "aware"$/;"	v	class:AwareDateTime
@@ -781,6 +782,7 @@ DEFAULT_TIMEOUT	venv/lib/python3.6/site-packages/pip/_vendor/urllib3/util/timeou
 DEFAULT_WHITE_CHARS	venv/lib/python3.6/site-packages/pip/_vendor/pyparsing.py	/^    DEFAULT_WHITE_CHARS = " \\n\\t\\r"$/;"	v	class:ParserElement
 DEFAULT_WHITE_CHARS	venv/lib/python3.6/site-packages/pkg_resources/_vendor/pyparsing.py	/^    DEFAULT_WHITE_CHARS = " \\n\\t\\r"$/;"	v	class:ParserElement
 DEFAULT_WHITE_CHARS	venv/lib/python3.6/site-packages/setuptools/_vendor/pyparsing.py	/^    DEFAULT_WHITE_CHARS = " \\n\\t\\r"$/;"	v	class:ParserElement
+DELETE	api/db/model.py	/^    DELETE = auto()$/;"	v	class:QueryType
 DEPENDENCY_KEYS	venv/lib/python3.6/site-packages/pip/_vendor/distlib/metadata.py	/^    DEPENDENCY_KEYS = ('extras run_requires test_requires build_requires '$/;"	v	class:Metadata
 DEPRECATION_MSG_PREFIX	venv/lib/python3.6/site-packages/pip/_internal/utils/deprecation.py	/^DEPRECATION_MSG_PREFIX = "DEPRECATION: "$/;"	v
 DESERIALIZATION_CLASS	venv/lib/python3.6/site-packages/marshmallow/fields.py	/^    DESERIALIZATION_CLASS = None  # type: typing.Optional[typing.Type]$/;"	v	class:IP
@@ -1670,6 +1672,8 @@ INDEX_KEYS	venv/lib/python3.6/site-packages/pip/_vendor/distlib/metadata.py	/^  
 INDEX_PATTERN	venv/lib/python3.6/site-packages/pip/_vendor/distlib/compat.py	/^        INDEX_PATTERN = re.compile(r'^\\[\\s*(\\w+)\\s*\\]\\s*')$/;"	v	class:BaseConfigurator
 INERROR	venv/lib/python3.6/site-packages/psycopg/pq/_enums.py	/^    INERROR = auto()$/;"	v	class:TransactionStatus
 INFO	venv/lib/python3.6/site-packages/setuptools/_distutils/log.py	/^INFO = 2$/;"	v
+INSERT	api/db/model.py	/^    INSERT = auto()$/;"	v	class:QueryType
+INSERT_USER	api/db/model.py	/^    INSERT_USER = auto()$/;"	v	class:QueryType
 INSTALL_DIRECTORY_ATTRS	venv/lib/python3.6/site-packages/setuptools/command/bdist_egg.py	/^INSTALL_DIRECTORY_ATTRS = [$/;"	v
 INSTALL_SCHEMES	venv/lib/python3.6/site-packages/setuptools/_distutils/command/install.py	/^INSTALL_SCHEMES = {$/;"	v
 INSTALL_SCHEMES	venv/lib/python3.6/site-packages/setuptools/command/easy_install.py	/^    INSTALL_SCHEMES = dict($/;"	v	class:easy_install
@@ -3131,6 +3135,7 @@ QUEUE_SIZE	venv/lib/python3.6/site-packages/psycopg/copy.py	/^    QUEUE_SIZE = 1
 Query	venv/lib/python3.6/site-packages/psycopg/abc.py	/^Query = Union[str, bytes, "Composable"]$/;"	v
 QueryCanceled	venv/lib/python3.6/site-packages/psycopg/errors.py	/^class QueryCanceled(OperationalError):$/;"	c
 QueryPart	venv/lib/python3.6/site-packages/psycopg/_queries.py	/^class QueryPart(NamedTuple):$/;"	c
+QueryType	api/db/model.py	/^class QueryType(Enum):$/;"	c
 QueueCls	venv/lib/python3.6/site-packages/pip/_vendor/urllib3/connectionpool.py	/^    QueueCls = LifoQueue$/;"	v	class:ConnectionPool
 QuotedString	venv/lib/python3.6/site-packages/pip/_vendor/pyparsing.py	/^class QuotedString(Token):$/;"	c
 QuotedString	venv/lib/python3.6/site-packages/pkg_resources/_vendor/pyparsing.py	/^class QuotedString(Token):$/;"	c
@@ -3419,6 +3424,7 @@ SECONDS	venv/lib/python3.6/site-packages/marshmallow/fields.py	/^    SECONDS = "
 SECONDS_PER_DAY	venv/lib/python3.6/site-packages/aniso8601/builders/python.py	/^SECONDS_PER_DAY = MINUTES_PER_DAY * SECONDS_PER_MINUTE$/;"	v
 SECONDS_PER_MINUTE	venv/lib/python3.6/site-packages/aniso8601/builders/python.py	/^SECONDS_PER_MINUTE = 60$/;"	v
 SECURE_ORIGINS	venv/lib/python3.6/site-packages/pip/_internal/network/session.py	/^SECURE_ORIGINS: List[SecureOrigin] = [$/;"	v	typeref:typename:List[SecureOrigin]
+SELECT	api/db/model.py	/^    SELECT = auto()$/;"	v	class:QueryType
 SELFCHECK_DATE_FMT	venv/lib/python3.6/site-packages/pip/_internal/self_outdated_check.py	/^SELFCHECK_DATE_FMT = "%Y-%m-%dT%H:%M:%SZ"$/;"	v
 SEMICOLON	venv/lib/python3.6/site-packages/pip/_vendor/packaging/requirements.py	/^SEMICOLON = L(";").suppress()$/;"	v
 SEMICOLON	venv/lib/python3.6/site-packages/pkg_resources/_vendor/packaging/requirements.py	/^SEMICOLON = L(";").suppress()$/;"	v
@@ -4162,6 +4168,7 @@ UNSAFE_METHOD_ATTRIBUTES	venv/lib/python3.6/site-packages/jinja2/sandbox.py	/^UN
 UNSAFE_NONE	venv/lib/python3.6/site-packages/werkzeug/http.py	/^    UNSAFE_NONE = "unsafe-none"$/;"	v	class:COEP
 UNSAFE_NONE	venv/lib/python3.6/site-packages/werkzeug/http.py	/^    UNSAFE_NONE = "unsafe-none"$/;"	v	class:COOP
 UP	venv/lib/python3.6/site-packages/pip/_vendor/colorama/ansi.py	/^    def UP(self, n=1):$/;"	m	class:AnsiCursor
+UPDATE	api/db/model.py	/^    UPDATE = auto()$/;"	v	class:QueryType
 URI	venv/lib/python3.6/site-packages/pip/_vendor/cachecontrol/controller.py	/^URI = re.compile(r"^(([^:\/?#]+):)?(\/\/([^\/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?")$/;"	v
 URI	venv/lib/python3.6/site-packages/pip/_vendor/packaging/requirements.py	/^URI = Regex(r"[^ ]+")("url")$/;"	v
 URI	venv/lib/python3.6/site-packages/pkg_resources/_vendor/packaging/requirements.py	/^URI = Regex(r"[^ ]+")("url")$/;"	v
@@ -15973,6 +15980,8 @@ handle_parse_result	venv/lib/python3.6/site-packages/click/core.py	/^    def han
 handle_pip_version_check	venv/lib/python3.6/site-packages/pip/_internal/cli/base_command.py	/^    def handle_pip_version_check(self, options: Values) -> None:$/;"	m	class:Command	typeref:typename:None
 handle_pip_version_check	venv/lib/python3.6/site-packages/pip/_internal/cli/req_command.py	/^    def handle_pip_version_check(self, options: Values) -> None:$/;"	m	class:IndexGroupCommand	typeref:typename:None
 handle_redirect	venv/lib/python3.6/site-packages/pip/_vendor/requests/auth.py	/^    def handle_redirect(self, r, **kwargs):$/;"	m	class:HTTPDigestAuth
+handle_request	api/response/view.py	/^def handle_request(query_type, table, query_vals, msg_ok="Success", http_status_err=500):$/;"	f
+handle_request_with_schema	api/response/view.py	/^def handle_request_with_schema(query_type, table, schema, schema_partial=False, msg_ok="Success"/;"	f
 handle_requirement_line	venv/lib/python3.6/site-packages/pip/_internal/req/req_file.py	/^def handle_requirement_line($/;"	f	typeref:typename:ParsedRequirement
 handle_revoked_token_error	venv/lib/python3.6/site-packages/flask_jwt_extended/jwt_manager.py	/^        def handle_revoked_token_error(e):$/;"	f	member:JWTManager._set_error_handler_callbacks	file:
 handle_sigint	venv/lib/python3.6/site-packages/pip/_internal/cli/progress_bars.py	/^    def handle_sigint(self, signum, frame):  # type: ignore$/;"	m	class:InterruptibleMixin
@@ -16397,10 +16406,10 @@ insertText	venv/lib/python3.6/site-packages/pip/_vendor/html5lib/treebuilders/do
 insertText	venv/lib/python3.6/site-packages/pip/_vendor/html5lib/treebuilders/dom.py	/^        def insertText(self, data, parent=None):$/;"	m	class:getDomBuilder.TreeBuilder
 insertText	venv/lib/python3.6/site-packages/pip/_vendor/html5lib/treebuilders/etree.py	/^        def insertText(self, data, insertBefore=None):$/;"	m	class:getETreeBuilder.Element
 insertText	venv/lib/python3.6/site-packages/pip/_vendor/html5lib/treebuilders/etree_lxml.py	/^            def insertText(self, data, insertBefore=None):$/;"	m	class:TreeBuilder.__init__.Element
-insertUser	db.py	/^def insertUser(table, dict):$/;"	f
 insert_on	venv/lib/python3.6/site-packages/pip/_vendor/pkg_resources/__init__.py	/^    def insert_on(self, path, loc=None, replace=False):$/;"	m	class:Distribution
 insert_on	venv/lib/python3.6/site-packages/pkg_resources/__init__.py	/^    def insert_on(self, path, loc=None, replace=False):  # noqa: C901$/;"	m	class:Distribution
 insert_option_group	venv/lib/python3.6/site-packages/pip/_internal/cli/parser.py	/^    def insert_option_group($/;"	m	class:CustomOptionParser	typeref:typename:optparse.OptionGroup
+insert_user	db.py	/^def insert_user(table, dict):$/;"	f
 inspect_format_method	venv/lib/python3.6/site-packages/jinja2/sandbox.py	/^def inspect_format_method(callable: t.Callable) -> t.Optional[str]:$/;"	f	typeref:typename:t.Optional[str]
 install	venv/lib/python3.6/site-packages/importlib_metadata/_compat.py	/^def install(cls):$/;"	f
 install	venv/lib/python3.6/site-packages/pip/_internal/operations/install/legacy.py	/^def install($/;"	f	typeref:typename:bool
@@ -17574,6 +17583,7 @@ makeXMLTags	venv/lib/python3.6/site-packages/pkg_resources/_vendor/pyparsing.py	
 makeXMLTags	venv/lib/python3.6/site-packages/setuptools/_vendor/pyparsing.py	/^def makeXMLTags(tagStr):$/;"	f
 make_algorithm	venv/lib/python3.6/site-packages/itsdangerous/jws.py	/^    def make_algorithm(self, algorithm_name):$/;"	m	class:JSONWebSignatureSerializer
 make_alias_redirect_url	venv/lib/python3.6/site-packages/werkzeug/routing.py	/^    def make_alias_redirect_url($/;"	m	class:MapAdapter	typeref:typename:str
+make_api_response	api/request/view.py	/^def make_api_response(msg, res, code):$/;"	f
 make_archive	venv/lib/python3.6/site-packages/pip/_vendor/distlib/_backport/shutil.py	/^def make_archive(base_name, format, root_dir=None, base_dir=None, verbose=0,$/;"	f
 make_archive	venv/lib/python3.6/site-packages/setuptools/_distutils/archive_util.py	/^def make_archive(base_name, format, root_dir=None, base_dir=None, verbose=0,$/;"	f
 make_archive	venv/lib/python3.6/site-packages/setuptools/_distutils/cmd.py	/^    def make_archive(self, base_name, format, root_dir=None, base_dir=None,$/;"	m	class:Command
@@ -18770,6 +18780,7 @@ parse_regex	venv/lib/python3.6/site-packages/pip/_vendor/tomli/_parser.py	/^def 
 parse_repeating_interval	venv/lib/python3.6/site-packages/aniso8601/interval.py	/^def parse_repeating_interval($/;"	f
 parse_req_from_editable	venv/lib/python3.6/site-packages/pip/_internal/req/constructors.py	/^def parse_req_from_editable(editable_req: str) -> RequirementParts:$/;"	f	typeref:typename:RequirementParts
 parse_req_from_line	venv/lib/python3.6/site-packages/pip/_internal/req/constructors.py	/^def parse_req_from_line(name: str, line_source: Optional[str]) -> RequirementParts:$/;"	f	typeref:typename:RequirementParts
+parse_req_to_json	api/request/view.py	/^def parse_req_to_json(schema, callback, req=request):$/;"	f
 parse_requirement	venv/lib/python3.6/site-packages/pip/_vendor/distlib/util.py	/^def parse_requirement(req):$/;"	f
 parse_requirement	venv/lib/python3.6/site-packages/pip/_vendor/distlib/version.py	/^    def parse_requirement(self, s):$/;"	m	class:Matcher
 parse_requirement_arg	venv/lib/python3.6/site-packages/setuptools/package_index.py	/^def parse_requirement_arg(spec):$/;"	f
@@ -22225,7 +22236,7 @@ upcaseTokens	venv/lib/python3.6/site-packages/pkg_resources/_vendor/pyparsing.py
 upcaseTokens	venv/lib/python3.6/site-packages/pkg_resources/_vendor/pyparsing.py	/^upcaseTokens = tokenMap(lambda t: _ustr(t).upper())$/;"	v
 upcaseTokens	venv/lib/python3.6/site-packages/setuptools/_vendor/pyparsing.py	/^    upcaseTokens = staticmethod(tokenMap(lambda t: _ustr(t).upper()))$/;"	v	class:pyparsing_common
 upcaseTokens	venv/lib/python3.6/site-packages/setuptools/_vendor/pyparsing.py	/^upcaseTokens = tokenMap(lambda t: _ustr(t).upper())$/;"	v
-update	db.py	/^def update(table, ticket_id, record):$/;"	f
+update	db.py	/^def update(table, dict, ticket_id):$/;"	f
 update	venv/lib/python3.6/site-packages/click/_termui_impl.py	/^    def update(self, n_steps: int, current_item: t.Optional[V] = None) -> None:$/;"	m	class:ProgressBar	typeref:typename:None
 update	venv/lib/python3.6/site-packages/pip/_internal/cli/progress_bars.py	/^    def update(self) -> None:$/;"	m	class:DownloadProgressSpinner	typeref:typename:None
 update	venv/lib/python3.6/site-packages/pip/_internal/cli/progress_bars.py	/^    def update(self) -> None:$/;"	m	class:SilentBar	typeref:typename:None

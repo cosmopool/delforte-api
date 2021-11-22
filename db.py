@@ -1,7 +1,4 @@
-# from flask_sqlalchemy import SQLAlchemy
 import psycopg
-
-# db = SQLAlchemy()
 
 PG_URL = "postgresql://10.5.40.10:5432"
 HOST = "10.5.40.10"
@@ -11,36 +8,14 @@ PASSWORD = "masktrum(sapiencia)19812"
 DB_NAME = "test"
 CONNECTION = f"host={HOST} port={PORT} user={USER} password={PASSWORD} dbname={DB_NAME}"
 
-# with psycopg.connect(f"host={HOST} port={PORT} user={USER} password={PASSWORD} dbname={DB_NAME}") as conn:
-#     conn.execute(" CREATE TABLE tickets (id bigserial PRIMARY KEY, client_name text NOT NULL, client_phone varchar(11) NOT NULL, service_type varchar(10) NOT NULL, description text NOT NULL, is_finished bool DEFAULT false NOT NULL)")
-#     conn.execute(" CREATE TABLE users (id smallserial PRIMARY KEY, username varchar(80) UNIQUE NOT NULL, password text NOT NULL)")
-#     conn.execute(" CREATE TABLE appointments (id bigserial PRIMARY KEY, date date NOT NULL, time time NOT NULL, duration interval NOT NULL, is_finished bool DEFAULT false, ticket_id bigserial NOT NULL)")
-
-#     conn.execute(" INSERT INTO users (username, password) VALUES (%s, %s)", ("kaio", "kaio123"))
-#     conn.execute(" INSERT INTO users (username, password) VALUES (%s, %s)", ("kaio", "kaio123"))
-#     conn.execute(" INSERT INTO users (username, password) VALUES (%s, %s)", ("kaio", "kaio123"))
-    
-#     users = conn.execute("SELECT * FROM users").fetchall()
-
-#     for user in users:
-#         print(user)
-    
-#     conn.execute("DROP TABLE users")
-
 def str_values(tuple):
     """ Print a string with `%s` for each element of a tuple. Usable for a psycopg SQL query. """
     result = []
-    for element in tuple:
+    for _ in tuple:
         result.append("%s")
     result = ", ".join(result)
 
     return result
-
-# def insert(table, columns, values):
-#     columns = ",".join(columns)
-#     query = f"INSERT INTO {table} ({columns}) VALUES ({str_values(values)})"
-#     with psycopg.connect(CONNECTION) as conn:
-#         conn.execute(query, values)
 
 def insert(table, dict):
     columns = ", ".join(dict.keys())
@@ -58,6 +33,7 @@ def select(table, dict):
     """ Return a dictionaries of records """
     result = []
     if type(table) == type(()):
+        print(f" -------------- here 1123")
         # TODO: code real implementation to UNION
         # column = dict.keys()
         # value = dict.values()
@@ -68,12 +44,13 @@ def select(table, dict):
         # print(f"-------------------------------------------------- here")
 
     elif len(dict.keys()) == 1:
+        print(f" -------------- here 2231")
         column = "".join(dict.keys())
         value = "".join(dict.values())
         query = f"SELECT row_to_json({ table }) FROM { table } WHERE { column } { value }"
         # print(query)
 
-    # print(f"-------------------------------------------------- here: { query }")
+    print(f"-------------------------------------------------- query: { query }")
     with psycopg.connect(CONNECTION) as conn:
         selection = conn.execute(query).fetchall()
         for record in selection:
@@ -113,7 +90,7 @@ def delete(table, dict):
 
 def make_update_str(record):
     keys = record.keys()
-    values = record.values()
+    # values = record.values()
     list = []
 
     for key in keys:
@@ -121,12 +98,12 @@ def make_update_str(record):
 
     return ", ".join(list)
 
-def update(table, ticket_id, record):
+def update(table, dict, ticket_id):
     """ Return a dictionaries of records """
-    ticket_id = ticket_id.get("id")
-    columns = ", ".join(str(record.keys()))
-    values = ", ".join(str(record.values()))
-    query = f"UPDATE { table } SET { make_update_str(record) } WHERE id = { ticket_id }"
+    # ticket_id = ticket_id.get("id")
+    # columns = ", ".join(str(dict.keys()))
+    # values = ", ".join(str(dict.values()))
+    query = f"UPDATE { table } SET { make_update_str(dict) } WHERE id = { ticket_id }"
 
     with psycopg.connect(CONNECTION) as conn:
         result = conn.execute(query)
@@ -140,8 +117,8 @@ def auth_user(table=None, dict=None, user_id=None):
     if table and dict and not user_id:
         password = str(dict.get("password"))
         username = str(dict.get("username"))
-        column = "".join(dict.keys())
-        value = "".join(dict.values())
+        # column = "".join(dict.keys())
+        # value = "".join(dict.values())
         # query = f"SELECT id FROM { table } WHERE { column } = crypt('{ value }', password)"
         query = f"SELECT row_to_json(users) FROM { table } WHERE username = \'{ username }\' AND password = crypt('{ password }', password)"
         # print(f"----------------------- 1 query: { query }")
@@ -165,7 +142,7 @@ def auth_user(table=None, dict=None, user_id=None):
 
     return result
 
-def insertUser(table, dict):
+def insert_user(table, dict):
     columns = ", ".join(dict.keys())
     dict_vals = tuple(dict.values())
     values = (dict_vals[0], f"crypt(\'{dict_vals[1]}\', gen_salt(\'bf\'))")

@@ -39,7 +39,7 @@ class User(Resource):
             print(e)
             raise Exception(e)
         else:
-            result = insertUser("users", user)
+            result = insert_user("users", user)
             return result
 
     @jwt_required()
