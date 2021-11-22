@@ -33,7 +33,7 @@ def select(table, dict):
     """ Return a dictionaries of records """
     result = []
     if type(table) == type(()):
-        print(f" -------------- here 1123")
+        # print(f" -------------- here 1123")
         # TODO: code real implementation to UNION
         # column = dict.keys()
         # value = dict.values()
@@ -44,13 +44,13 @@ def select(table, dict):
         # print(f"-------------------------------------------------- here")
 
     elif len(dict.keys()) == 1:
-        print(f" -------------- here 2231")
+        # print(f" -------------- here 2231")
         column = "".join(dict.keys())
         value = "".join(dict.values())
         query = f"SELECT row_to_json({ table }) FROM { table } WHERE { column } { value }"
         # print(query)
 
-    print(f"-------------------------------------------------- query: { query }")
+    # print(f"-------------------------------------------------- query: { query }")
     with psycopg.connect(CONNECTION) as conn:
         selection = conn.execute(query).fetchall()
         for record in selection:

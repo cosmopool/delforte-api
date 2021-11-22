@@ -51,3 +51,24 @@ def handle_request(query_type, table, query_vals, msg_ok="Success", http_status_
         http_status = 200
     finally:
         return {"Status": message, "Result": result}, http_status
+
+def handle_auth_request(query_type, table, schema, create_token_callback):
+        try:
+            credentials = schema().load(request.json)
+        except Exception as e:
+            message = "Error"
+            result = str(e)
+            http_status = 406
+        else:
+            try:
+                result = query_type(table, credentials)
+            except Exception as e:
+                message = "Error"
+                result = ["Something went wrong while login", str(e)]
+                http_status = 500
+            else:
+                message = "Success"
+                result = create_token_callback(identity=result[0].get("username"))
+                http_status = 200
+        finally:
+            return {"Status": message, "Result": result}, http_status
