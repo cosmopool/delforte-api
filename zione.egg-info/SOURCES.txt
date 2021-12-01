@@ -1,0 +1,8 @@
+setup.py
+zione/db.py
+zione/setup.py
+zione.egg-info/PKG-INFO
+zione.egg-info/SOURCES.txt
+zione.egg-info/dependency_links.txt
+zione.egg-info/requires.txt
+zione.egg-info/top_level.txt
