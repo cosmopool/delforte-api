@@ -1,4 +1,5 @@
 # import db
+# from zione import db
 
 def authenticate(username, password):
     user = db.auth("users", {username: password})
