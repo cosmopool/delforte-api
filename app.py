@@ -31,9 +31,3 @@ api.add_resource(AppointmentsActionsReschedule, "/appointments/<string:appointme
 api.add_resource(User, "/users")
 api.add_resource(Users, "/users/<string:user_id>")
 api.add_resource(UserAuthenticate, "/login")
-<<<<<<< HEAD
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='5000')
-=======
->>>>>>> refactor/endpoint-response
