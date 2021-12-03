@@ -105,6 +105,25 @@ def update(table, dict, ticket_id):
 
     return status
 
+def show_users(table, dict):
+    """ Return a dictionaries of records """
+    result = []
+    query = f"WITH users_no_pass AS (SELECT id, username FROM users) SELECT row_to_json(users_no_pass) FROM users_no_pass"
+    # print(f"----------------------- 1 query: { query }")
+
+    with psycopg.connect(CONNECTION) as conn:
+        selection = conn.execute(query).fetchall()
+
+        for record in selection:
+            # print(record)
+            if record != None:
+                result.append(record[0])
+
+    if len(result) == 0:
+        raise KeyError("Error selecting users in the database.")
+
+    return result
+
 def auth_user(table=None, dict=None, user_id=None):
     """ Return a dictionaries of records """
     result = []
