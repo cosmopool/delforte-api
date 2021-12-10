@@ -29,17 +29,12 @@ def select(table, dict):
     if type(table) == type(()):
         # print(f" -------------- here 1123")
         # TODO: code real implementation to UNION
-        # column = dict.keys()
-        # value = dict.values()
-        # query = f"SELECT row_to_json({ table[0] }) FROM { table[0] } WHERE { column[0] } = { value[0] } UNION SELECT row_to_json({ table[1] }) FROM { table[1] } WHERE { column[1] } = { value[1] }"
-        # query = f"SELECT row_to_json({ table[0] }) FROM { table[0] } WHERE ticketId = { value[0] } UNION SELECT row_to_json({ table[1] }) FROM { table[1] } WHERE { column[1] } = { value[1] }"
         # TODO: need to filer records by *dict* argument. right now, it prints every record
-        query = f"SELECT row_to_json(app_tck) FROM (SELECT tickets.clientName, tickets.clientPhone, tickets.clientAddress, tickets.serviceType, tickets.description, appointments.date, appointments.time, appointments.duration, appointments.id, appointments.ticketId, tickets.isFinished FROM appointments INNER JOIN tickets ON appointments.ticketId = tickets.id) AS app_tck;"
-        # print(f"----------------------- query: {query}")
+        query = "SELECT row_to_json(entry_view) FROM entry_view"
 
     elif len(dict.keys()) == 1:
         # print(f" -------------- here 2231")
-        column = "".join(dict.keys())
+        column = "".join(dict.keys()) + "_view"
         value = "".join(dict.values())
         query = f"SELECT row_to_json({ table }) FROM { table } WHERE { column } { value }"
         # print(query)

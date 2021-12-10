@@ -5,7 +5,7 @@ class TicketModel():
         # self.id = self.__new_id__()
         self.id = id
         self.clientName = clientName
-        self.clientAddress = clientName
+        self.clientAddress = clientAddress
         self.clientPhone = clientPhone
         self.serviceType = serviceType
         self.description = description
