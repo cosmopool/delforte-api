@@ -1,18 +1,17 @@
-import datetime
 from marshmallow import Schema, fields
 
 class AppointmentModel():
-    def __init__(self, date, time, duration, ticket_id, is_finished, address):
+    def __init__(self, date, time, duration, ticketId, isFinished, address):
         self.id = self.new_id()
         self.date = date
         self.time = time
         self.duration = duration
-        self.ticket_id = ticket_id
-        self.is_finished = is_finished
+        self.ticketId = ticketId
+        self.isFinished = isFinished
         self.address = address
-        self.client_name = client_name
-        self.client_phone = client_phone
-        self.service_type = service_type
+        self.clientName = clientName
+        self.clientPhone = clientPhone
+        self.serviceType = serviceType
         self.description = description
 
 class AppointmentSchema(Schema):
@@ -20,10 +19,10 @@ class AppointmentSchema(Schema):
     date = fields.Date(required=True)
     time = fields.Time(required=True)
     duration = fields.Str(required=True)
-    ticket_id = fields.Integer(required=True)
-    is_finished = fields.Boolean(default=False)
+    ticketId = fields.Integer(required=True)
+    isFinished = fields.Boolean(default=False)
     address = fields.Str(required=True)
-    client_name = fields.Str(required=True)
-    client_phone = fields.Str(required=True)
-    service_type = fields.Str(required=True)
+    clientName = fields.Str(required=True)
+    clientPhone = fields.Str(required=True)
+    serviceType = fields.Str(required=True)
     description = fields.Str(required=True)

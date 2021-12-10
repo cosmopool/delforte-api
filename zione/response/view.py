@@ -1,4 +1,5 @@
 from flask import request
+# from zione.request.view import address_geocoding
 
 def handle_request_with_schema(query_type, table, schema, schema_partial=False, msg_ok="Success", query_vals=None, err_code=409, req=request):
     """
@@ -18,6 +19,8 @@ def handle_request_with_schema(query_type, table, schema, schema_partial=False, 
         result = f"Error parsing JSON: {str(e)}"
         http_status = 406
     else:
+        # print(data_from_request['client_address'])
+        # print(address_geocoding(data_from_request['client_address']))
         try:
             if query_vals:
                 result = query_type(table, data_from_request, query_vals)
