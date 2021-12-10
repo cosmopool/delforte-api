@@ -26,6 +26,7 @@ def insert(table, dict):
 def select(table, dict):
     """ Return a dictionaries of records """
     result = []
+    table = table + "_view"
     if type(table) == type(()):
         # print(f" -------------- here 1123")
         # TODO: code real implementation to UNION
@@ -34,12 +35,12 @@ def select(table, dict):
 
     elif len(dict.keys()) == 1:
         # print(f" -------------- here 2231")
-        column = "".join(dict.keys()) + "_view"
+        column = "".join(dict.keys())
         value = "".join(dict.values())
-        query = f"SELECT row_to_json({ table }) FROM { table } WHERE { column } { value }"
+        query = f"SELECT row_to_json({ table }) FROM { table } WHERE \"{ column }\" { value }"
         # print(query)
 
-    # print(f"-------------------------------------------------- query: { query }")
+    print(f"-------------------------------------------------- query: { query }")
     with psycopg.connect(CONNECTION) as conn:
         selection = conn.execute(query).fetchall()
         for record in selection:

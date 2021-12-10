@@ -11,7 +11,7 @@ class TicketOpen(Resource):
         """ Get all open tickets """
         query_type = select
         table = "tickets"
-        val = {"is_finished": "= false"}
+        val = {"isFinished": "= false"}
 
         return handle_request(query_type, table, val)
 
@@ -31,35 +31,35 @@ class TicketOpen(Resource):
 
 class Tickets(Resource):
     @jwt_required()
-    def get(self, ticket_id):
+    def get(self, ticketId):
         """ Get information about specific ticket """
         query_type = select
         table = "appointments"
-        val = {"id": ticket_id}
+        val = {"id": ticketId}
 
         return handle_request(query_type, table, val)
 
 
 
     @jwt_required()
-    def patch(self, ticket_id):
+    def patch(self, ticketId):
         """ Edit a specific ticket """
         query_type = update
         table = "tickets"
         schema = TicketSchema
         schema_partial = True
-        query_vals = ticket_id
+        query_vals = ticketId
 
         return handle_request_with_schema(query_type, table, schema, schema_partial, query_vals=query_vals)
 
 
 
     @jwt_required()
-    def delete(self, ticket_id):
+    def delete(self, ticketId):
         """ Delete a specific ticket """
         query_type = delete
         table = "tickets"
-        val = {"id": ticket_id}
+        val = {"id": ticketId}
 
         return handle_request(query_type, table, val)
 
@@ -72,8 +72,8 @@ class Tickets(Resource):
         else:
             raise ValueError("Id do not match.")
 
-        if ticket.get("is_finished"):
-            ticket.pop("is_finished")
+        if ticket.get("isFinished"):
+            ticket.pop("isFinished")
         if ticket.get("id"):
             ticket.pop("id")
 
@@ -81,10 +81,10 @@ class Tickets(Resource):
 
 class TicketsActionsClose(Resource):
     @jwt_required()
-    def post(self, ticket_id):
+    def post(self, ticketId):
         """ Close a open ticket """
         query_type = update
         table = "ticket"
-        val = {"id": ticket_id}, {"is_finished": "true"}
+        val = {"id": ticketId}, {"isFinished": "true"}
 
         return handle_request(query_type, table, val)
