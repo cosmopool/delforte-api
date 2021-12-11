@@ -12,7 +12,13 @@ def str_values(tuple):
     return result
 
 def insert(table, dict):
-    columns = ", ".join(dict.keys())
+    table = table + "_view"
+    columns = []
+
+    for col in dict.keys():
+        columns.append(f"\"{col}\"")
+
+    columns = ", ".join(columns)
     values = tuple(dict.values())
 
     query = f"WITH entry AS (INSERT INTO {table} ({columns}) VALUES ({str_values(dict)}) RETURNING id) SELECT row_to_json(entry) FROM entry"
@@ -40,7 +46,7 @@ def select(table, dict):
         query = f"SELECT row_to_json({ table }) FROM { table } WHERE \"{ column }\" { value }"
         # print(query)
 
-    print(f"-------------------------------------------------- query: { query }")
+    # print(f"-------------------------------------------------- query: { query }")
     with psycopg.connect(CONNECTION) as conn:
         selection = conn.execute(query).fetchall()
         for record in selection:
