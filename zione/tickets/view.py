@@ -1,3 +1,4 @@
+from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required
 
@@ -25,7 +26,9 @@ class TicketOpen(Resource):
         schema = TicketSchema
         msg_ok = "Ticket Opened"
 
-        return handle_request_with_schema(query_type, table, schema, msg_ok)
+        res = handle_request_with_schema(request.json, query_type, table, schema, msg_ok)
+        # print("========= ticket:", res)
+        return res
 
 
 
@@ -50,7 +53,7 @@ class Tickets(Resource):
         schema_partial = True
         query_vals = ticketId
 
-        return handle_request_with_schema(query_type, table, schema, schema_partial, query_vals=query_vals)
+        return handle_request_with_schema(request.json, query_type, table, schema, schema_partial, query_vals=query_vals)
 
 
 

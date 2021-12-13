@@ -26,7 +26,7 @@ class AppointmentOpen(Resource):
         schema = AppointmentSchema
         msg_ok = "Appointment Booked"
 
-        return handle_request_with_schema(query_type, table, schema, msg_ok)
+        return handle_request_with_schema(request.json, request.json, query_type, table, schema, msg_ok)
 
 class Appointments(Resource):
     @jwt_required()
@@ -49,7 +49,7 @@ class Appointments(Resource):
         query_vals = appointment_id
         err_code = 409
 
-        return handle_request_with_schema(query_type, table, schema, schema_partial, msg_ok, query_vals=query_vals, err_code=err_code)
+        return handle_request_with_schema(request.json, query_type, table, schema, schema_partial, msg_ok, query_vals=query_vals, err_code=err_code)
 
     def __val_appointment__(self, dict, id):
         # validade ticket id and id
@@ -93,5 +93,5 @@ class AppointmentsActionsReschedule(Resource):
         # query_vals = {"id": appointment_id}
         query_vals = appointment_id
 
-        # return handle_request_with_schema(update, table, schema, schema_partial, query_vals=query_vals, err_code=err_code)
-        return handle_request_with_schema(query_type, table, schema, schema_partial, query_vals=query_vals)
+        # return handle_request_with_schema(request.json, update, table, schema, schema_partial, query_vals=query_vals, err_code=err_code)
+        return handle_request_with_schema(request.json, query_type, table, schema, schema_partial, query_vals=query_vals)

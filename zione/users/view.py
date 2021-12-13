@@ -12,7 +12,8 @@ class UserAuthenticate(Resource):
         table = "users"
         schema = UserSchema
 
-        return handle_auth_request(query_type, table, schema, create_access_token)
+        res = handle_auth_request(request.json, query_type, table, schema, create_access_token)
+        return res
 
         # schema = UserSchema()
         # try:

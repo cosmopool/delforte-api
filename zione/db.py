@@ -15,6 +15,10 @@ def insert(table, dict):
     table = table + "_view"
     columns = []
 
+    # raise ValueError('Hiheihihi deu ruiM!')
+
+    # print(" ------------------- insert", dict)
+
     for col in dict.keys():
         columns.append(f"\"{col}\"")
 
@@ -26,7 +30,7 @@ def insert(table, dict):
     with psycopg.connect(CONNECTION) as conn:
         result = conn.execute(query, values).fetchall()
 
-    print(result[0][0])
+    # print(result[0][0])
     return result[0][0]['id']
 
 def select(table, dict):

@@ -1,7 +1,20 @@
-from flask import request
 # from zione.request.view import address_geocoding
 
-def handle_request_with_schema(query_type, table, schema, schema_partial=False, msg_ok="Success", query_vals=None, err_code=409, req=request):
+def parse_json_schema(schema, json, schema_partial):
+    schema_view = schema(partial=schema_partial)
+    message = "Success"
+
+    try:
+        result = schema_view.load(json)
+    except Exception as e:
+        message = "Error"
+        result = f"Error parsing JSON: {str(e)}"
+        http_status = 406
+    finally:
+        return {"Status": message, "Result": result}
+
+
+def handle_request_with_schema(req_json, query_type, table, schema, schema_partial=False, msg_ok="Success", query_vals=None, err_code=409):
     """
 
 
@@ -11,28 +24,22 @@ def handle_request_with_schema(query_type, table, schema, schema_partial=False, 
     :param msg_ok:
     :param req:
     """
-    schema_view = schema(partial=schema_partial)
+    data_from_request = parse_json_schema(schema, req_json, schema_partial)
+    if data_from_request['Status'] == 'Error':
+        return {"Status": data_from_request['Status'], "Result": data_from_request['Result']}, 500
+
     try:
-        data_from_request = schema_view.load(req.json)
+        if query_vals:
+            result = query_type(table, data_from_request['Result'], query_vals)
+        else:
+            result = query_type(table, data_from_request['Result'])
     except Exception as e:
         message = "Error"
-        result = f"Error parsing JSON: {str(e)}"
-        http_status = 406
+        result = str(e)
+        http_status = 500
     else:
-        # print(data_from_request['client_address'])
-        # print(address_geocoding(data_from_request['client_address']))
-        try:
-            if query_vals:
-                result = query_type(table, data_from_request, query_vals)
-            else:
-                result = query_type(table, data_from_request)
-        except Exception as e:
-            message = "Error"
-            result = str(e)
-            http_status = 500
-        else:
-            message = msg_ok
-            http_status = 200
+        message = msg_ok
+        http_status = 200
     finally:
         return {"Status": message, "Result": result}, http_status
 
@@ -55,9 +62,9 @@ def handle_request(query_type, table, query_vals, msg_ok="Success", http_status_
     finally:
         return {"Status": message, "Result": result}, http_status
 
-def handle_auth_request(query_type, table, schema, create_token_callback):
+def handle_auth_request(req_json, query_type, table, schema, create_token_callback):
         try:
-            credentials = schema().load(request.json)
+            credentials = schema().load(req_json)
         except Exception as e:
             message = "Error"
             result = str(e)
