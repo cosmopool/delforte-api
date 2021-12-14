@@ -3,7 +3,17 @@ envrc
 token.txt
 new_token.py
 appointments-api-v1-database.sql
+__pycache__/
+__pycache__/*
+/__pycache__/*
 __pycache__
+.__pycache__
+__pycache__/app.cpython-39.pyc
+zione.egg-info/
+zione/appointments/__pycache__
+zione/tickets/__pycache__
+zione/users/__pycache__
+zione/__pycache__
 api.egg-info/
 api/appointments/__pycache__
 api/tickets/__pycache__
