@@ -6,3 +6,4 @@ new_token.py
 appointments-api-v1-database.sql
 __pycache__
 api.egg-info/
+__pycache__/app.cpython-39.pyc
