@@ -94,15 +94,19 @@ def make_update_str(record):
     list = []
 
     for key in keys:
-        list.append(f"{ key } = \'{ record.get(key) }\'")
+        list.append(f"\"{ key }\" = \'{ record.get(key) }\'")
 
     return ", ".join(list)
 
-def update(table, dict, ticketId):
+def update(table, dict, entryId=None):
     """ Return a dictionaries of records """
+    table = f"{table}_view"
+    if not entryId:
+        ticketId = dict.get("id")
     # ticketId = ticketId.get("id")
     # columns = ", ".join(str(dict.keys()))
     # values = ", ".join(str(dict.values()))
+    # TODO: need to test to see if reschedule is working
     query = f"UPDATE { table } SET { make_update_str(dict) } WHERE id = { ticketId }"
 
     with psycopg.connect(CONNECTION) as conn:
