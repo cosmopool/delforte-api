@@ -1,4 +1,10 @@
 from flask import request
+<<<<<<< HEAD
+=======
+import requests
+import json
+import urllib.parse
+>>>>>>> feature/address-geocoding
 
 def parse_req_to_json(schema, callback, req=request):
     schema_model = schema()
@@ -16,3 +22,16 @@ def parse_req_to_json(schema, callback, req=request):
 
 def make_api_response(msg, res, code):
     return {"Status": msg, "res": res}, code
+<<<<<<< HEAD
+=======
+
+def address_geocoding(address):
+    # TODO: use google geocoding api
+    address_encoded = urllib.parse.quote(address)
+    url = f"http://api.positionstack.com/v1/forward?access_key=e35984b52f301530ccef88aa2260179e&output=json&query={address_encoded}"
+
+    req = requests.get(url)
+    res = json.loads(req.content)
+
+    return res
+>>>>>>> feature/address-geocoding

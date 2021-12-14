@@ -12,7 +12,17 @@ def str_values(tuple):
     return result
 
 def insert(table, dict):
-    columns = ", ".join(dict.keys())
+    table = table + "_view"
+    columns = []
+
+    # raise ValueError('Hiheihihi deu ruiM!')
+
+    # print(" ------------------- insert", dict)
+
+    for col in dict.keys():
+        columns.append(f"\"{col}\"")
+
+    columns = ", ".join(columns)
     values = tuple(dict.values())
 
     query = f"WITH entry AS (INSERT INTO {table} ({columns}) VALUES ({str_values(dict)}) RETURNING id) SELECT row_to_json(entry) FROM entry"
@@ -20,28 +30,24 @@ def insert(table, dict):
     with psycopg.connect(CONNECTION) as conn:
         result = conn.execute(query, values).fetchall()
 
-    print(result[0][0])
+    # print(result[0][0])
     return result[0][0]['id']
 
 def select(table, dict):
     """ Return a dictionaries of records """
     result = []
+    table = table + "_view"
     if type(table) == type(()):
         # print(f" -------------- here 1123")
         # TODO: code real implementation to UNION
-        # column = dict.keys()
-        # value = dict.values()
-        # query = f"SELECT row_to_json({ table[0] }) FROM { table[0] } WHERE { column[0] } = { value[0] } UNION SELECT row_to_json({ table[1] }) FROM { table[1] } WHERE { column[1] } = { value[1] }"
-        # query = f"SELECT row_to_json({ table[0] }) FROM { table[0] } WHERE ticket_id = { value[0] } UNION SELECT row_to_json({ table[1] }) FROM { table[1] } WHERE { column[1] } = { value[1] }"
         # TODO: need to filer records by *dict* argument. right now, it prints every record
-        query = f"SELECT row_to_json(app_tck) FROM (SELECT tickets.client_name, tickets.client_phone, tickets.client_address, tickets.service_type, tickets.description, appointments.date, appointments.time, appointments.duration, appointments.id, appointments.ticket_id, tickets.is_finished FROM appointments INNER JOIN tickets ON appointments.ticket_id = tickets.id) AS app_tck;"
-        # print(f"----------------------- query: {query}")
+        query = "SELECT row_to_json(entry_view) FROM entry_view"
 
     elif len(dict.keys()) == 1:
         # print(f" -------------- here 2231")
         column = "".join(dict.keys())
         value = "".join(dict.values())
-        query = f"SELECT row_to_json({ table }) FROM { table } WHERE { column } { value }"
+        query = f"SELECT row_to_json({ table }) FROM { table } WHERE \"{ column }\" { value }"
         # print(query)
 
     # print(f"-------------------------------------------------- query: { query }")
@@ -88,22 +94,45 @@ def make_update_str(record):
     list = []
 
     for key in keys:
-        list.append(f"{ key } = \'{ record.get(key) }\'")
+        list.append(f"\"{ key }\" = \'{ record.get(key) }\'")
 
     return ", ".join(list)
 
-def update(table, dict, ticket_id):
+def update(table, dict, entryId=None):
     """ Return a dictionaries of records """
-    # ticket_id = ticket_id.get("id")
+    table = f"{table}_view"
+    if not entryId:
+        ticketId = dict.get("id")
+    # ticketId = ticketId.get("id")
     # columns = ", ".join(str(dict.keys()))
     # values = ", ".join(str(dict.values()))
-    query = f"UPDATE { table } SET { make_update_str(dict) } WHERE id = { ticket_id }"
+    # TODO: need to test to see if reschedule is working
+    query = f"UPDATE { table } SET { make_update_str(dict) } WHERE id = { ticketId }"
 
     with psycopg.connect(CONNECTION) as conn:
         result = conn.execute(query)
         status = return_command_status(result.pgresult.command_status)
 
     return status
+
+def show_users(table, dict):
+    """ Return a dictionaries of records """
+    result = []
+    query = f"WITH users_no_pass AS (SELECT id, username FROM users) SELECT row_to_json(users_no_pass) FROM users_no_pass"
+    # print(f"----------------------- 1 query: { query }")
+
+    with psycopg.connect(CONNECTION) as conn:
+        selection = conn.execute(query).fetchall()
+
+        for record in selection:
+            # print(record)
+            if record != None:
+                result.append(record[0])
+
+    if len(result) == 0:
+        raise KeyError("Error selecting users in the database.")
+
+    return result
 
 def auth_user(table=None, dict=None, user_id=None):
     """ Return a dictionaries of records """
