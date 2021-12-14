@@ -18,9 +18,25 @@ class Agenda(Resource):
         return handle_request(query_type, table, query_vals)
 
     def post(self):
-        appointment_json_with_ticket_id = json.loads(request.data)
+        data = json.loads(request.data)
+        ticket = {
+                'clientName': data['clientName'],
+                'clientAddress': data['clientAddress'],
+                'clientPhone': data['clientPhone'],
+                'serviceType': data['serviceType'],
+                'description': data['description']
+                }
 
-        ticket_schema = handle_request_with_schema(request.json, insert, 'tickets', TicketSchema)
+        appointment = {
+                'date': data['date'],
+                'time': data['time'],
+                'duration': data['duration']
+                }
 
-        appointment_json_with_ticket_id['ticketId'] = ticket_schema[0]['Result']
-        return handle_request_with_schema(appointment_json_with_ticket_id, insert, 'appointments', AppointmentSchema)
+        if not appointment['date'] or not appointment['time'] or not appointment['duration']:
+            return {'Status': 'Error', 'Result': 'Appointment with empty fields'}, 406
+
+        ticket_schema = handle_request_with_schema(ticket, insert, 'tickets', TicketSchema, schema_partial=True)
+
+        appointment['ticketId'] = ticket_schema[0]['Result']
+        return handle_request_with_schema(appointment, insert, 'appointments', AppointmentSchema, schema_partial=True)
