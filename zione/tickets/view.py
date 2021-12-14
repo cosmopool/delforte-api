@@ -57,7 +57,7 @@ class Tickets(Resource):
 
 
 
-    @jwt_required()
+    # @jwt_required()
     def delete(self, ticketId):
         """ Delete a specific ticket """
         query_type = delete
@@ -87,7 +87,8 @@ class TicketsActionsClose(Resource):
     def post(self, ticketId):
         """ Close a open ticket """
         query_type = update
-        table = "ticket"
-        val = {"id": ticketId}, {"isFinished": "true"}
+        table = "tickets"
+        val = {"id": ticketId, "isFinished": "true"}
+        query_vals = ticketId
 
         return handle_request(query_type, table, val)

@@ -30,23 +30,23 @@ class AppointmentOpen(Resource):
 
 class Appointments(Resource):
     @jwt_required()
-    def get(self, appointment_id):
+    def get(self, appointmentId):
         """ Get information about specific appointment """
         query_type = select
         table = "appointments"
-        val = {"id": appointment_id}
+        val = {"id": appointmentId}
 
         return handle_request(query_type, table, val)
 
     @jwt_required()
-    def patch(self,appointment_id):
+    def patch(self,appointmentId):
         """ Edit a specific appointment """
         query_type = update
         table = "appointments"
         schema = AppointmentSchema
         schema_partial = True
-        # query_vals = {"id": appointment_id}
-        query_vals = appointment_id
+        # query_vals = {"id": appointmentId}
+        query_vals = appointmentId
         err_code = 409
 
         return handle_request_with_schema(request.json, query_type, table, schema, schema_partial, msg_ok, query_vals=query_vals, err_code=err_code)
@@ -68,30 +68,35 @@ class Appointments(Resource):
         pass
 
     @jwt_required()
-    def delete(self,appointment_id):
+    def delete(self,appointmentId):
         """ Delete a specific appointment """
-        pass
+        query_type = delete
+        table = "appointments"
+        val = {"id": appointmentId}
+
+        return handle_request(query_type, table, val)
 
 class AppointmentsActionsClose(Resource):
     @jwt_required()
-    def post(self,appointment_id):
+    def post(self,appointmentId):
         """ Close a open appointment """
         query_type = update
         table = "appointments"
-        val = {"id": appointment_id}
+        val = {"id": appointmentId}
 
         return handle_request(query_type, table, val)
 
 class AppointmentsActionsReschedule(Resource):
     @jwt_required()
-    def post(self, appointment_id):
+    def post(self, appointmentId):
         """ Reschedule a specific appointment to a new date """
+        # TODO: need to test to see if it is working
         query_type = update
         table = "appointments"
         schema = AppointmentSchema
         schema_partial = True
-        # query_vals = {"id": appointment_id}
-        query_vals = appointment_id
+        # query_vals = {"id": appointmentId}
+        query_vals = appointmentId
 
         # return handle_request_with_schema(request.json, update, table, schema, schema_partial, query_vals=query_vals, err_code=err_code)
         return handle_request_with_schema(request.json, query_type, table, schema, schema_partial, query_vals=query_vals)
