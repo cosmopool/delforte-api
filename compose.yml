@@ -1,25 +1,47 @@
 version: '3'
 services:
   postgres:
-    image: "postgres:${POSTGRES_VERSION}"
+    image: 'postgres:14.0'
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASS}
       POSTGRES_DB: ${DATABASE_NAME}
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
-      - /home/files/Development/database:/var/lib/postgresql/data
-      - /home/files/Development/database/scripts:/docker-entrypoint-initdb.d
+      - /home/files/Development/database/data/:/var/lib/postgresql/data
+      - /home/files/Development/database/scripts/:/docker-entrypoint-initdb.d
 
-  zione_api:
-    image: "zione-api"
+  nginx:
+    build: ../nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - '8080:80'
+
+  zione-api:
+    build: .
+    container_name: zione-api
+    restart: always
     environment:
       DATABASE_HOST_PORT: 5432
-      DATABASE_HOST: "0.0.0.0"
-      APP_HOST: "0.0.0.0"
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASS: ${DATABASE_PASS}
+      APP_HOST: '0.0.0.0'
     ports:
-      - "5000:5000"
-    volumes:
-      - /home/files/Development/delforte-api-c:/app
+      - '5000:5000'
+    # volumes:
+    #   - /home/files/Development/delforte-api:/app
+
+  # zione_api:
+  #   image: "zione-api"
+  #   environment:
+  #     DATABASE_HOST_PORT: 5432
+  #     DATABASE_HOST: "0.0.0.0"
+  #     APP_HOST: "0.0.0.0"
+  #   ports:
+  #     - "5000:5000"
+  #   volumes:
+  #     - /home/files/Development/delforte-api:/app

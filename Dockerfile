@@ -7,5 +7,4 @@ ADD . /app
 RUN pip install -r requirements.txt
 RUN pip install uwsgi
 
-# CMD ["uwsgi", "--ini, "app.ini"]
-CMD uwsgi --ini app.ini
+CMD ["uwsgi", "--ini, "app.ini"]

@@ -1,10 +1,9 @@
 import os
 
 from flask import Flask
-from flask_restful import Resource, Api
+from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
-from zione import db
 from zione.users.view import User, Users, UserAuthenticate
 from zione.tickets.view import TicketOpen, Tickets, TicketsActionsClose
 from zione.appointments.view import Appointments, AppointmentOpen, AppointmentsActionsClose, AppointmentsActionsReschedule
@@ -14,6 +13,7 @@ app = Flask(__name__)
 api = Api(app)
 
 app.config['JWT_SECRET_KEY'] = os.environ.get("SECRET")
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = False
 
 jwt = JWTManager(app)
 
