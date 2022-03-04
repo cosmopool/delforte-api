@@ -1,5 +1,12 @@
+MANIFEST.in
+app.ini
+app.py
+requirements.txt
 setup.py
+start.sh
+zione/__init__.py
 zione/db.py
+zione/settings.py
 zione/setup.py
 zione.egg-info/PKG-INFO
 zione.egg-info/SOURCES.txt

@@ -3,6 +3,8 @@ envrc
 token.txt
 new_token.py
 appointments-api-v1-database.sql
+venv/
+.pytest_cache/
 __pycache__/
 __pycache__/*
 /__pycache__/*
