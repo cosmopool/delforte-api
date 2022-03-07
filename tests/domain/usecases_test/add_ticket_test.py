@@ -27,52 +27,51 @@ class TestAddTicketUsecase:
         isFinished = False
     )
 
-    repository = RepositoryStub()
 
-    def test_usecase_return_response_instance(self):
-        res = add_ticket_usecase(self.repository, self.tk_dict)
+    def test_usecase_return_response_instance(self, repo_stub):
+        res = add_ticket_usecase(repo_stub, self.tk_dict)
 
         assert isinstance(res, Response)
 
-    def test_dict_with_missings_fields_should_return_http_code_406(self):
+    def test_dict_with_missings_fields_should_return_http_code_406(self, repo_stub):
         tk_dict = self.tk_dict
         if tk_dict.get("clientName"):
             self.tk_dict.pop("clientName")
-        res = add_ticket_usecase(self.repository, self.tk_dict)
+        res = add_ticket_usecase(repo_stub, self.tk_dict)
 
         assert res.http_code == 406
 
-    def test_dict_with_missings_fields_should_return_error(self):
+    def test_dict_with_missings_fields_should_return_error(self, repo_stub):
         tk_dict = self.tk_dict
         if tk_dict.get("clientName"):
             self.tk_dict.pop("clientName")
-        res = add_ticket_usecase(self.repository, self.tk_dict)
+        res = add_ticket_usecase(repo_stub, self.tk_dict)
 
         assert res.error == MissingFieldError()
 
-    def test_dict_with_missings_fields_should_return_message(self):
+    def test_dict_with_missings_fields_should_return_message(self, repo_stub):
         tk_dict = self.tk_dict
         if tk_dict.get("clientName"):
             self.tk_dict.pop("clientName")
-        res = add_ticket_usecase(self.repository, self.tk_dict)
+        res = add_ticket_usecase(repo_stub, self.tk_dict)
 
         assert "Missing data for required field" in res.message
 
-    def test_dict_with_missings_fields_should_return_status_error(self):
+    def test_dict_with_missings_fields_should_return_status_error(self, repo_stub):
         tk_dict = self.tk_dict
         if tk_dict.get("clientName"):
             self.tk_dict.pop("clientName")
-        res = add_ticket_usecase(self.repository, self.tk_dict)
+        res = add_ticket_usecase(repo_stub, self.tk_dict)
 
         assert res.status == Status.Error
 
-    def test_valid_dict_should_return_http_cod_200(self):
+    def test_valid_dict_should_return_http_cod_200(self, repo_stub):
         tk_dict = self.tk.to_dict()
         if tk_dict.get("id"):
             self.tk_dict.pop("id")
-        res = add_ticket_usecase(self.repository, tk_dict)
+        res = add_ticket_usecase(repo_stub, tk_dict)
 
         assert res.http_code == 200
 
-    # def test_dict_with_missings_fields_should_return_http_code_406(self):
+    # def test_dict_with_missings_fields_should_return_http_code_406(self, repo_stub):
     #     pass

@@ -22,7 +22,7 @@ def authenticate_user_usecase(repo: RepositoryInterface, user: dict, create_toke
             message=f"Missing data for required field {e.__str__()}",
         )
     else:
-        authentication = repo.select(record.to_dict(), "users")
+        authentication = repo.auth_user(record.to_dict())
         if authentication.status == Status.Success:
             token = create_token_callback(identity=record.username)
             return Response(

@@ -1,15 +1,13 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Optional
 
-from zione.core.settings import CONNECTION
 from zione.domain.entities.response import Response
 
 @dataclass
 class RepositoryInterface(ABC):
     """Interface for all repositories classes"""
 
-    connection: str = CONNECTION
+    connection: str
 
     @abstractmethod
     def insert(self, entry: dict[str, str], table: str) -> Response:

@@ -1,12 +1,6 @@
-from logging import DEBUG
+import logging
 import os
 
-HOST = os.environ['DATABASE_HOST']
-PORT = os.environ['DATABASE_PORT']
-USER = os.environ['DATABASE_USER']
-PASSWORD = os.environ['DATABASE_PASS']
-DB_NAME = os.environ['DATABASE_NAME']
-CONNECTION = f"host={HOST} port={PORT} user={USER} password={PASSWORD} dbname={DB_NAME}"
 
 # -*- coding: utf-8 -*-
 """Application configuration."""
@@ -17,31 +11,20 @@ from datetime import timedelta
 class Config(object):
     """Base configuration."""
 
-    SECRET_KEY = os.environ.get('SECRET_KEY')  # TODO: Change me
+    SECRET_KEY = os.environ.get('SECRET_KEY')
     APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
-    BCRYPT_LOG_ROUNDS = 13
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # jwt
-    JWT_AUTH_USERNAME_KEY = 'email'
-    JWT_AUTH_HEADER_PREFIX = 'Token'
-    CORS_ORIGIN_WHITELIST = [
-        'http://0.0.0.0:4100',
-        'http://localhost:4100',
-        'http://0.0.0.0:8000',
-        'http://localhost:8000',
-        'http://0.0.0.0:4200',
-        'http://localhost:4200',
-        'http://0.0.0.0:4000',
-        'http://localhost:4000',
-    ]
-    JWT_HEADER_TYPE = 'Token'
+    JWT_AUTH_USERNAME_KEY = 'username'
+    # JWT_AUTH_HEADER_PREFIX = 'Token'
+    # JWT_HEADER_TYPE = 'Token'
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(10 ** 6)
 
     # log
-    LOG_LEVEL = DEBUG
+    LOG_LEVEL = logging.ERROR
 
     # database
     HOST = os.environ['DATABASE_HOST']
@@ -65,9 +48,17 @@ class DevConfig(Config):
     ENV = 'development'
     DEBUG = True
     DB_NAME = 'development'
-    # Put the db file in project root
     CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
-    JWT_ACCESS_TOKEN_EXPIRES = timedelta(10 ** 6)
+    JWT_ACCESS_TOKEN_EXPIRES = False
+    HOST = "0.0.0.0"
+    PORT = "5432"
+    USER = "zione"
+    PASSWORD = "test_pass"
+    DB_NAME = "test"
+    CONNECTION = f"host={HOST} port={PORT} user={USER} password={PASSWORD} dbname={DB_NAME}"
+
+    # log
+    LOG_LEVEL = logging.DEBUG
 
 
 class TestConfig(Config):
@@ -76,6 +67,13 @@ class TestConfig(Config):
     ENV = 'testing'
     TESTING = True
     DEBUG = True
-    CONNECTION = f"host=0.0.0.0 port=5432 user={USER} password={PASSWORD} dbname=test"
-    # For faster tests; needs at least 4 to avoid "ValueError: Invalid rounds"
-    BCRYPT_LOG_ROUNDS = 4
+    JWT_ACCESS_TOKEN_EXPIRES = False
+    HOST = "0.0.0.0"
+    PORT = "5432"
+    USER = "zione"
+    PASSWORD = "test_pass"
+    DB_NAME = "test"
+    CONNECTION = f"host={HOST} port={PORT} user={USER} password={PASSWORD} dbname={DB_NAME}"
+
+    # log
+    LOG_LEVEL = logging.DEBUG

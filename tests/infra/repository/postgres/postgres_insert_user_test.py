@@ -1,52 +1,53 @@
 import logging
 import pytest
+import random
 from zione.core.enums import Status
-from zione.core.exceptions import DatabaseError, MissingFieldError
+from zione.core.exceptions import MissingFieldError
 
 from zione.domain.entities.response import Response
-from zione.infra.repositories.postgres_repository import PostgresRepository
 
-repo = PostgresRepository()
-user = {"username": "asdfas", "password": "asdfasdfaf"} 
+user = {"username": "kaio", "password": "minecraft"} 
 logging.basicConfig(level=logging.DEBUG)
 
 
 @pytest.mark.integration
 @pytest.mark.db_insert_user
-def test_insert_user_method_returns_response_instance():
+def test_insert_user_method_returns_response_instance(repo):
     res = repo.insert_user({})
 
     assert isinstance(res, Response)
 
 @pytest.mark.integration
 @pytest.mark.db_insert_user
-def test_insert_user_with_all_valid_fields():
-    username = user['username']
-    res = repo.insert_user(user)
-    user_id = repo.select({"username": f"= '{username}'"}, "users").result[0]['id']
-    repo.delete(user_id, "users")
+def test_insert_user_with_all_valid_fields(repo):
+    num = random.random()
+    usr = {"username": f"gusta{num}", "password": "minecraft"} 
+    res = repo.insert_user(usr)
+    repo.delete(2, "users")
 
     assert res.status == Status.Success
-    assert res.result[0] > 0
+    assert res.error is None
 
 @pytest.mark.integration
 @pytest.mark.db_insert_user
-def test_insert_user_with_missing_fields():
+def test_should_return_error_trying_to_insert_same_username(repo):
+    res = repo.insert_user(user)
+    repo.delete(2, "users")
+
+    assert res.status == Status.Error
+    assert res.error is not None
+
+@pytest.mark.integration
+@pytest.mark.db_insert_user
+def test_insert_user_with_missing_fields(repo):
     res = repo.insert_user({"username": "kaio"})
 
     assert res.error == MissingFieldError()
 
 @pytest.mark.integration
 @pytest.mark.db_insert_user
-def test_insert_user_with_empty_password():
+def test_insert_user_with_empty_password(repo):
     res = repo.insert_user({"username": "kaio", "password": ""})
 
     assert res.error == MissingFieldError()
 
-# @pytest.mark.integration
-# @pytest.mark.db_insert_user
-# def test_insert_user_table_that_dont_exist_should_return_error_on_response():
-#     res = repo.insert_user({}, "inexistent_table")
-#
-#     assert res.error == DatabaseError("Error on select")
-#     assert "does not exist" in res.message

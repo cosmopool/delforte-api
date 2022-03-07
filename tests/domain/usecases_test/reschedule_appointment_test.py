@@ -4,9 +4,6 @@ from zione.domain.entities.response import Response
 from zione.domain.entities.appointment import Appointment
 from zione.domain.usecases.reschedule_appointment import reschedule_appointment_usecase
 
-from tests.stubs.repository_stub import RepositoryStub
-from zione.domain.usecases.reschedule_appointment import reschedule_appointment_usecase
-
 
 class TestCloseAppointmentUsecase:
     ap = Appointment(
@@ -23,46 +20,44 @@ class TestCloseAppointmentUsecase:
         "duration": "1:30",
     }
 
-    repository = RepositoryStub()
-
-    def test_usecase_return_response_instance(self):
-        res = reschedule_appointment_usecase(self.repository, self.ap_dict, self.ap.id)
+    def test_usecase_return_response_instance(self, repo_stub):
+        res = reschedule_appointment_usecase(repo_stub, self.ap_dict, self.ap.id)
 
         assert isinstance(res, Response)
 
-    def test_invalid_id_number(self):
-        res = reschedule_appointment_usecase(self.repository, self.ap_dict, -4)
+    def test_invalid_id_number(self, repo_stub):
+        res = reschedule_appointment_usecase(repo_stub, self.ap_dict, -4)
 
         assert res.status == Status.Error
         assert res.http_code == 406
 
-    def test_string_instead_of_int(self):
-        res = reschedule_appointment_usecase(self.repository, self.ap_dict, "1")
+    def test_string_instead_of_int(self, repo_stub):
+        res = reschedule_appointment_usecase(repo_stub, self.ap_dict, "1")
 
         assert res.error == InvalidValueError()
         assert "Invalid field value" in res.message
 
-    def test_None_instead_of_int(self):
-        res = reschedule_appointment_usecase(self.repository, self.ap_dict, None)
+    def test_None_instead_of_int(self, repo_stub):
+        res = reschedule_appointment_usecase(repo_stub, self.ap_dict, None)
 
         assert res.status == Status.Error
         assert "Invalid field value" in res.message
 
-    def test_valid_dict_should_return_http_cod_200(self):
-        res = reschedule_appointment_usecase(self.repository, self.ap_dict, self.ap.id)
+    def test_valid_dict_should_return_http_cod_200(self, repo_stub):
+        res = reschedule_appointment_usecase(repo_stub, self.ap_dict, self.ap.id)
 
         assert res.http_code == 200
 
-    def test_dict_with_only_one_field_should_return_status_success(self):
+    def test_dict_with_only_one_field_should_return_status_success(self, repo_stub):
         new_date = self.ap_dict
         new_date.pop("duration")
         new_date.pop("date")
-        res = reschedule_appointment_usecase(self.repository, new_date, self.ap.id)
+        res = reschedule_appointment_usecase(repo_stub, new_date, self.ap.id)
 
         assert res.status == Status.Success
 
-    def test_dict_with_date_time_duration_fields_should_return_status_success(self):
-        res = reschedule_appointment_usecase(self.repository, self.ap_dict, self.ap.id)
+    def test_dict_with_date_time_duration_fields_should_return_status_success(self, repo_stub):
+        res = reschedule_appointment_usecase(repo_stub, self.ap_dict, self.ap.id)
 
         assert res.status == Status.Success
 

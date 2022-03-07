@@ -120,7 +120,9 @@ class PostgresRepository(RepositoryInterface):
         if id < 0:
             id = record.get("id")
 
-        # TODO: need to test to see if this query works for reschedule
+        if record.get("id", None):
+            record.pop("id")
+
         query = (
             f"UPDATE { table } SET { self._make_update_str(record) } WHERE id = { id }"
         )

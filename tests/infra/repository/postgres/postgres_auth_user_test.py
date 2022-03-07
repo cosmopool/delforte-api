@@ -1,16 +1,16 @@
 import pytest
-from zione.core.exceptions import DatabaseError, MissingFieldError
+from zione.core.exceptions import MissingFieldError
 
 from zione.domain.entities.response import Response
-from zione.infra.repositories.postgres_repository import PostgresRepository
+from zione.core.dependency_injection import make_repository
 
-repo = PostgresRepository()
 user = {"username": "kaio", "password": "kaio123"}
 
 
 @pytest.mark.integration
 @pytest.mark.db_auth_user
-def test_auth_user_method_returns_response_instance():
+def test_auth_user_method_returns_response_instance(app):
+    repo = make_repository(app)
     res = repo.auth_user(user)
 
     assert isinstance(res, Response)
@@ -18,19 +18,21 @@ def test_auth_user_method_returns_response_instance():
 
 @pytest.mark.integration
 @pytest.mark.db_auth_user
-def test_auth_user_with_all_valid_fields():
+def test_auth_user_with_all_valid_fields(app):
+    repo = make_repository(app)
     res = repo.auth_user({"username": "kaio", "password": "kaio123"})
 
-    assert res.result[0] == {
-        "id": 3,
-        "password": "$2a$06$xkUaWviKJtbDdO5mbY.fqebyMScPXJMRxkrcceoz1VS.FvK0sW3tW",
-        "username": "kaio",
-    }
+    username = res.result[0].get("username", None)
+    password = res.result[0].get("password", None)
+
+    assert username is not None
+    assert password is not None
 
 
 @pytest.mark.integration
 @pytest.mark.db_auth_user
-def test_auth_user_with_missing_fields():
+def test_auth_user_with_missing_fields(app):
+    repo = make_repository(app)
     res = repo.auth_user({"username": "kaio"})
 
     assert res.error == MissingFieldError()
@@ -38,7 +40,8 @@ def test_auth_user_with_missing_fields():
 
 @pytest.mark.integration
 @pytest.mark.db_auth_user
-def test_auth_user_with_empty_password():
+def test_auth_user_with_empty_password(app):
+    repo = make_repository(app)
     res = repo.auth_user({"username": "kaio", "password": ""})
 
     assert res.error == MissingFieldError()
@@ -46,7 +49,8 @@ def test_auth_user_with_empty_password():
 
 # @pytest.mark.integration
 # @pytest.mark.db_auth_user
-# def test_auth_user_table_that_dont_exist_should_return_error_on_response():
+# def test_auth_user_table_that_dont_exist_should_return_error_on_response(app):
+    repo = make_repository(app)
 #     res = repo.auth_user({}, "inexistent_table")
 #
 #     assert res.error == DatabaseError("Error on select")

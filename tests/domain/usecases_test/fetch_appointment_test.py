@@ -2,8 +2,6 @@ from zione.core.enums import Status
 from zione.domain.entities.response import Response
 from zione.domain.usecases.fetch_open_appointments import fetch_open_appointments_usecase
 
-from tests.stubs.repository_stub import RepositoryStub
-
 
 class TestEditAppointmentUsecase:
     ap_dict = {
@@ -15,20 +13,19 @@ class TestEditAppointmentUsecase:
         "isFinished": False,
     }
 
-    repository = RepositoryStub()
 
-    def test_usecase_return_response_instance(self):
-        res = fetch_open_appointments_usecase(self.repository)
+    def test_usecase_return_response_instance(self, repo_stub):
+        res = fetch_open_appointments_usecase(repo_stub)
 
         assert isinstance(res, Response)
 
-    def test_should_return_status_success(self):
-        res = fetch_open_appointments_usecase(self.repository)
+    def test_should_return_status_success(self, repo_stub):
+        res = fetch_open_appointments_usecase(repo_stub)
 
         assert res.status == Status.Success
 
-    def test_sould_return_open_appointment_in_result(self):
-        res = fetch_open_appointments_usecase(self.repository)
+    def test_sould_return_open_appointment_in_result(self, repo_stub):
+        res = fetch_open_appointments_usecase(repo_stub)
 
         assert res.result == [self.ap_dict.__str__()]
 
