@@ -1,4 +1,4 @@
 include app.py
 include app.ini
 include start.sh
-include requirements.txt
+include requirements/prod-req.txt

@@ -40,7 +40,7 @@ class TestPostgresRepository:
         res = repo.insert(self.ap, "appointments")
         
         assert res.error == DatabaseError("Error on insert")
-        assert res.message == 'connection failed: password authentication failed for user "zione"'
+        assert 'password authentication failed' in res.message
 
 
     def test_wrong_db_name_error_message(self, app):
@@ -54,7 +54,7 @@ class TestPostgresRepository:
         res = repo.insert(self.ap, "appointments")
         
         assert res.error == DatabaseError("Error on insert")
-        assert res.message == 'connection failed: database "000" does not exist'
+        assert 'database "000" does not exist' in res.message
 
 
     def test_wrong_user_error_message(self, app):
@@ -68,4 +68,4 @@ class TestPostgresRepository:
         res = repo.insert(self.ap, "appointments")
         
         assert res.error == DatabaseError("Error on insert")
-        assert res.message == 'connection failed: password authentication failed for user "000"'
+        assert 'password authentication failed for user "000"' in res.message

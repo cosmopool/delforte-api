@@ -1,0 +1,85 @@
+name: delforte-api test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  # build:
+
+  test:
+    name: Api test
+
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        # `POSTGRES_HOST` is `postgres`
+        env:
+          POSTGRES_DB: test
+          POSTGRES_PASSWORD: test_pass
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: zione
+        ports:
+          - 5432:5432
+        # set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 15s
+          --health-timeout 5s
+          --health-retries 8
+
+    steps:
+
+      # postgres setup
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client
+
+      # python setup
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/test-req.txt
+      #
+      # - name: Lint with flake8
+      #   run: |
+          # stop the build if there are Python syntax errors or undefined names
+          # flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          # flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Database setup
+        run: make init-db
+        env:
+          PGPASSWORD: test_pass
+
+      - name: Test with pytest
+        env:
+          DATABASE_HOST: "localhost"
+          DATABASE_PASS: "test_pass"
+          DATABASE_NAME: "test"
+          DATABASE_USER: "zione"
+          DATABASE_PORT: "5432"
+          SECRET_KEY: "a1b64b4563065c3f60d28aa13744351040d1a25137a42a984770cc2b099f1520"
+        run: |
+          pytest --cov . --cov-report xml:/home/runner/coverage.xml
+
+      # codecov setup
+      - uses: actions/checkout@master
+      - uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_API_TOKEN }}
+          files: /home/runner/coverage.xml
+          flags: unittests
+          verbose: true
