@@ -1,17 +1,25 @@
 version: '3'
 services:
-  postgres:
-    image: 'postgres:13-alpine'
-    environment:
-      POSTGRES_USER: ${DATABASE_USER}
-      POSTGRES_PASSWORD: ${DATABASE_PASS}
-      POSTGRES_DB: ${DATABASE_NAME}
-      PGDATA: /var/lib/postgresql/data/pgdata
+  # postgres:
+  #   image: 'postgres:13-alpine'
+  #   environment:
+  #     POSTGRES_USER: ${DATABASE_USER}
+  #     POSTGRES_PASSWORD: ${DATABASE_PASS}
+  #     POSTGRES_DB: ${DATABASE_NAME}
+  #     PGDATA: /var/lib/postgresql/data/pgdata
+  #   ports:
+  #     - '5432:5432'
+  #   volumes:
+  #     - ${HOME}/data/database/:/var/lib/postgresql/data
+  #     - ${HOME}/api/container/db_scripts/:/docker-entrypoint-initdb.d
+  
+  nginx:
+    build: container/nginx/
+    container_name: nginx
+    restart: always
     ports:
-      - '5432:5432'
-    volumes:
-      - ${HOME}/data/database/:/var/lib/postgresql/data
-      - ${HOME}/api/container/db_scripts/:/docker-entrypoint-initdb.d
+      - '80:80'
+      - '443:443'
 
   zione-api:
     build: .
