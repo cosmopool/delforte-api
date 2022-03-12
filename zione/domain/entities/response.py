@@ -5,6 +5,7 @@ from zione.core.enums import Status
 from zione.core.exceptions import BaseError
 from zione.core.utils.dict_utils import capitalize_dict_keys
 
+
 @dataclass
 class Response:
     status: Status
@@ -15,6 +16,6 @@ class Response:
 
     def to_dict(self):
         d = asdict(self)
-        d.pop('http_code')
+        d.pop("http_code")
 
         return capitalize_dict_keys(d), self.http_code

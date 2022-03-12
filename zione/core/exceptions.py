@@ -1,6 +1,7 @@
 import logging
 from dataclasses import dataclass
 
+
 @dataclass
 class BaseError(Exception):
     class_msg: str = ""
@@ -18,12 +19,17 @@ class BaseError(Exception):
 
 class DatabaseError(BaseError):
     """Database error"""
+
     class_msg = "Database error"
+
 
 class MissingFieldError(BaseError):
     """Missing fields error"""
+
     class_msg = "There's one or more missings required fields"
+
 
 class InvalidValueError(BaseError):
     """When the value received is invalid"""
+
     class_msg = "There's one or more field with invalid value"

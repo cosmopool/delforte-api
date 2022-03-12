@@ -5,11 +5,11 @@ from dataclasses import dataclass, asdict
 
 from zione.core.exceptions import MissingFieldError
 
-T = TypeVar('T', str, int)
+T = TypeVar("T", str, int)
+
 
 @dataclass
 class Entity(ABC):
-    
     @classmethod
     def from_dict(cls, d):
         """
@@ -26,8 +26,8 @@ class Entity(ABC):
 
         try:
             instance = cls(**tmp)
-        except KeyError as err:
-            raise MissingFieldError('Missing field')
+        except KeyError:
+            raise MissingFieldError("Missing field")
         except Exception as err:
             logging.error(f"Error while deserializing JSON {err}")
             raise err
@@ -38,6 +38,6 @@ class Entity(ABC):
         """Return object as dictionary"""
         d = asdict(self)
         if self.id and self.id <= 0:
-            d.pop('id')
+            d.pop("id")
 
         return d

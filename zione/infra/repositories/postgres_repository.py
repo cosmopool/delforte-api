@@ -172,7 +172,7 @@ class PostgresRepository(RepositoryInterface):
             with connect(self.connection) as conn:
                 query_result = conn.execute(query).fetchall()
                 for record in query_result:
-                    if record != None:
+                    if record is not None:
                         res.append(record[0])
 
                 if len(res) == 0:

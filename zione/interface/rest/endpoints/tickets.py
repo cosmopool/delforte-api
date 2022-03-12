@@ -22,19 +22,18 @@ class TicketOpen(Resource):
         """Get all open tickets"""
         response = fetch_open_tickets_usecase(self._repository)
         logging.debug(f"Response from usecase: {response}")
-        logging.debug(f"GET request at: /tickets/")
+        logging.debug("GET request at: /tickets/")
 
         return {
             "Status": f"{response.status}",
             "Result": response.result,
         }, response.http_code
 
-
     @jwt_required()
     def post(self):
         """Open a new ticket"""
         entry = json.loads(request.data)
-        logging.debug(f"POST request at: /tickets/")
+        logging.debug("POST request at: /tickets/")
         logging.debug(f"Request data: {request.data}")
 
         response = add_ticket_usecase(self._repository, entry)
@@ -53,7 +52,7 @@ class Tickets(Resource):
     @jwt_required()
     def get(self, id):
         """Get information about specific ticket"""
-        logging.debug(f"GET request at: /tickets/id")
+        logging.debug("GET request at: /tickets/id")
         logging.debug(f"Request parameter: {id}")
 
         response = fetch_ticket_usecase(self._repository, id)
@@ -64,12 +63,11 @@ class Tickets(Resource):
             "Result": response.result,
         }, response.http_code
 
-
     @jwt_required()
     def patch(self, id):
         """Edit a specific ticket"""
         entry = json.loads(request.data)
-        logging.debug(f"PATCH request at: /tickets/id")
+        logging.debug("PATCH request at: /tickets/id")
         logging.debug(f"Request parameter: {id}")
         logging.debug(f"Request data: {request.data}")
 
@@ -81,11 +79,10 @@ class Tickets(Resource):
             "Result": response.result,
         }, response.http_code
 
-
     # @jwt_required()
     def delete(self, id):
         """Delete a specific ticket"""
-        logging.debug(f"DELETE request at: /tickets/id")
+        logging.debug("DELETE request at: /tickets/id")
         logging.debug(f"Request parameter: {id}")
 
         response = edit_ticket_usecase(self._repository, id)
@@ -104,7 +101,7 @@ class TicketsActionsClose(Resource):
     @jwt_required()
     def post(self, id):
         """Close a open ticket"""
-        logging.debug(f"POST request at: /tickets/id/actions/close")
+        logging.debug("POST request at: /tickets/id/actions/close")
         logging.debug(f"Request parameter: {id}")
 
         response = close_ticket_usecase(self._repository, id)

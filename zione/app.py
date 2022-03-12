@@ -29,7 +29,7 @@ def create_app(config_object=ProdConfig):
     register_users_endpoints(app, repo)
 
     return app
-     
+
 
 def register_agenda_endpoints(app: Flask, repo: dict):
     """Register all agenda endpoints"""
@@ -42,16 +42,30 @@ def register_tickets_endpoints(app: Flask, repo: dict):
     api = Api(app)
     api.add_resource(TicketOpen, "/tickets", resource_class_kwargs=repo)
     api.add_resource(Tickets, "/tickets/<string:id>", resource_class_kwargs=repo)
-    api.add_resource(TicketsActionsClose, "/tickets/<string:id>/actions/close", resource_class_kwargs=repo)
+    api.add_resource(
+        TicketsActionsClose,
+        "/tickets/<string:id>/actions/close",
+        resource_class_kwargs=repo,
+    )
 
 
 def register_appointments_endpoints(app: Flask, repo: dict):
     """Register all appointments endpoints"""
     api = Api(app)
     api.add_resource(AppointmentOpen, "/appointments", resource_class_kwargs=repo)
-    api.add_resource(Appointments, "/appointments/<string:id>", resource_class_kwargs=repo)
-    api.add_resource(AppointmentsActionsClose, "/appointments/<string:id>/actions/close", resource_class_kwargs=repo)
-    api.add_resource(AppointmentsActionsReschedule, "/appointments/<string:id>/actions/reschedule", resource_class_kwargs=repo)
+    api.add_resource(
+        Appointments, "/appointments/<string:id>", resource_class_kwargs=repo
+    )
+    api.add_resource(
+        AppointmentsActionsClose,
+        "/appointments/<string:id>/actions/close",
+        resource_class_kwargs=repo,
+    )
+    api.add_resource(
+        AppointmentsActionsReschedule,
+        "/appointments/<string:id>/actions/reschedule",
+        resource_class_kwargs=repo,
+    )
 
 
 def register_users_endpoints(app: Flask, repo: dict):

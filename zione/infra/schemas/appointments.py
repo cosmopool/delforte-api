@@ -2,6 +2,7 @@ from marshmallow import Schema, fields
 
 from zione.domain.entities.appointment import Appointment
 
+
 class AppointmentSchema(Schema):
     id = fields.Integer(strict=True, default=-1, required=False)
     # date = fields.Date(strict=True, required=True)

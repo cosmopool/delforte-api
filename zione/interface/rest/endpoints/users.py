@@ -16,7 +16,7 @@ class UserAuthenticate(Resource):
     def post(self):
         """Authenticate a user given a username and password"""
         entry = json.loads(request.data)
-        logging.debug(f"POST request at: /login")
+        logging.debug("POST request at: /login")
         logging.debug(f"Request data: {request.data}")
 
         response = authenticate_user_usecase(self._repository, entry, create_access_token)
