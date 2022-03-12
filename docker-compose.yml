@@ -1,0 +1,31 @@
+version: '3'
+services:
+  postgres:
+    image: 'postgres:13-alpine'
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASS}
+      POSTGRES_DB: ${DATABASE_NAME}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - '5432:5432'
+    volumes:
+      - ${HOME}/data/database/:/var/lib/postgresql/data
+      - ${HOME}/api/container/db_scripts/:/docker-entrypoint-initdb.d
+
+  zione-api:
+    build: .
+    container_name: zione-api
+    restart: always
+    environment:
+      DATABASE_PORT: 5432
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASS: ${DATABASE_PASS}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_CONN: "host=$DATABASE_HOST port=$DATABASE_PORT user=$DATABASE_USER password=$DATABASE_PASS dbname=$DATABASE_NAME"
+      APP_HOST: '0.0.0.0'
+      SECRET_KEY: ${SECRET_KEY}
+      MODULE_NAME: 'main'
+      VARIABLE_NAME: 'app'
+      APP_MODULE: 'main:app'

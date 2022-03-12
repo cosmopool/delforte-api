@@ -20,9 +20,7 @@ class Entity(ABC):
 
         tmp = {}
         for prop in cls.__dataclass_fields__:
-            # tmp[prop] = d.get(prop, None)
             val = d.get(prop, None)
-            logging.error(val)
             if val is not None:
                 tmp[prop] = val
 
@@ -31,6 +29,7 @@ class Entity(ABC):
         except KeyError as err:
             raise MissingFieldError('Missing field')
         except Exception as err:
+            logging.error(f"Error while deserializing JSON {err}")
             raise err
         else:
             return instance
