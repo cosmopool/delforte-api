@@ -1,5 +1,4 @@
 from zione.core.enums import Status
-from zione.core.exceptions import InvalidValueError
 from zione.domain.entities.response import Response
 from zione.domain.usecases.delete_appointment import delete_appointment_usecase
 
@@ -20,17 +19,23 @@ class TestDeleteAppointmentUsecase:
         res = delete_appointment_usecase(repo_stub, -4)
 
         assert res.status == Status.Error
-        assert res.http_code == 406
+        assert res.http_code == 412
+
+    def test_invalid_string(self, repo_stub):
+        res = delete_appointment_usecase(repo_stub, "a")
+
+        assert res.status == Status.Error
+        assert "invalid character" in res.message.lower()
 
     def test_string_instead_of_int(self, repo_stub):
         res = delete_appointment_usecase(repo_stub, "1")
 
-        assert res.error == InvalidValueError()
-        assert "Invalid field value" in res.message
+        assert res.status == Status.Success
 
     def test_None_instead_of_int(self, repo_stub):
         res = delete_appointment_usecase(repo_stub, None)
 
         assert res.status == Status.Error
-        assert "Invalid field value" in res.message
+        assert "not" in res.message.lower()
+        assert "nonetype" in res.message.lower()
 

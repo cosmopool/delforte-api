@@ -17,6 +17,7 @@ class Entity(ABC):
         only using the ones necessary to this class. Raise exception if there is
         any missing fields.
         """
+        logging.info("[ENTITY] starting deserialization from dictionary")
 
         tmp = {}
         for prop in cls.__dataclass_fields__:
@@ -29,7 +30,7 @@ class Entity(ABC):
         except KeyError:
             raise MissingFieldError("Missing field")
         except Exception as err:
-            logging.error(f"Error while deserializing JSON {err}")
+            logging.error(f"[ENTITY] Error while deserializing JSON {err}")
             raise err
         else:
             return instance

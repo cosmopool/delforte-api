@@ -1,6 +1,8 @@
 .envrc
 venv/
 venv*/
+container/nginx/ssl
+container/*.service
 .pytest_cache/
 __pycache__/
 __pycache__/**

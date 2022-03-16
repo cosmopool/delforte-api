@@ -9,6 +9,6 @@ class Appointment(Entity):
     date: str
     duration: str
     ticketId: int
-    isFinished: bool
+    isFinished: bool = False
     id: int = -1
     endpoint = "appointments"

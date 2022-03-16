@@ -8,9 +8,11 @@ from flask_jwt_extended import jwt_required
 from zione.domain.repository_interface import RepositoryInterface
 from zione.domain.usecases.add_ticket import add_ticket_usecase
 from zione.domain.usecases.close_ticket import close_ticket_usecase
+from zione.domain.usecases.delete_ticket import delete_ticket_usecase
 from zione.domain.usecases.edit_ticket import edit_ticket_usecase
 from zione.domain.usecases.fetch_open_tickets import fetch_open_tickets_usecase
 from zione.domain.usecases.fetch_ticket import fetch_ticket_usecase
+from zione.interface.utils.response import cook_response
 
 
 @dataclass
@@ -20,29 +22,23 @@ class TicketOpen(Resource):
     @jwt_required()
     def get(self):
         """Get all open tickets"""
-        response = fetch_open_tickets_usecase(self._repository)
-        logging.debug(f"Response from usecase: {response}")
-        logging.debug("GET request at: /tickets/")
+        logging.info("[ENDPOINT][TICKET] GET request at: /tickets... calling use case")
 
-        return {
-            "Status": f"{response.status}",
-            "Result": response.result,
-        }, response.http_code
+        response = fetch_open_tickets_usecase(self._repository)
+        logging.debug(f"[ENDPOINT][TICKET] response from fetch open tickets use case: {response}")
+
+        return cook_response(raw_response=response)
 
     @jwt_required()
     def post(self):
         """Open a new ticket"""
+        logging.info("[ENDPOINT][TICKET] POST request at: /tickets... calling use case")
+
         entry = json.loads(request.data)
-        logging.debug("POST request at: /tickets/")
-        logging.debug(f"Request data: {request.data}")
-
         response = add_ticket_usecase(self._repository, entry)
-        logging.debug(f"Response from usecase: {response}")
+        logging.debug(f"[ENDPOINT][TICKET] response from add ticket use case: {response}")
 
-        return {
-            "Status": f"{response.status}",
-            "Result": response.result,
-        }, response.http_code
+        return cook_response(raw_response=response)
 
 
 @dataclass
@@ -52,46 +48,33 @@ class Tickets(Resource):
     @jwt_required()
     def get(self, id):
         """Get information about specific ticket"""
-        logging.debug("GET request at: /tickets/id")
-        logging.debug(f"Request parameter: {id}")
+        logging.info(f"[ENDPOINT][TICKET] GET request at: /tickets/{id}")
 
         response = fetch_ticket_usecase(self._repository, id)
-        logging.debug(f"Response from usecase: {response}")
+        logging.debug(f"[ENDPOINT][TICKET] response from fetch ticket use case: {response}")
 
-        return {
-            "Status": f"{response.status}",
-            "Result": response.result,
-        }, response.http_code
+        return cook_response(raw_response=response)
 
     @jwt_required()
     def patch(self, id):
         """Edit a specific ticket"""
         entry = json.loads(request.data)
-        logging.debug("PATCH request at: /tickets/id")
-        logging.debug(f"Request parameter: {id}")
-        logging.debug(f"Request data: {request.data}")
+        logging.info(f"[ENDPOINT][TICKET] PATCH request at: /tickets/{id}")
 
-        response = edit_ticket_usecase(self._repository, entry)
-        logging.debug(f"Response from usecase: {response}")
+        response = edit_ticket_usecase(self._repository, entry, id)
+        logging.debug(f"[ENDPOINT][TICKET] response from edit ticket use case: {response}")
 
-        return {
-            "Status": f"{response.status}",
-            "Result": response.result,
-        }, response.http_code
+        return cook_response(raw_response=response)
 
     # @jwt_required()
     def delete(self, id):
         """Delete a specific ticket"""
-        logging.debug("DELETE request at: /tickets/id")
-        logging.debug(f"Request parameter: {id}")
+        logging.info(f"[ENDPOINT][TICKET] DELETE request at: /tickets/{id}")
 
-        response = edit_ticket_usecase(self._repository, id)
-        logging.debug(f"Response from usecase: {response}")
+        response = delete_ticket_usecase(self._repository, id)
+        logging.debug(f"[ENDPOINT][TICKET] response from delete ticket use case: {response}")
 
-        return {
-            "Status": f"{response.status}",
-            "Result": response.result,
-        }, response.http_code
+        return cook_response(raw_response=response)
 
 
 @dataclass
@@ -101,13 +84,9 @@ class TicketsActionsClose(Resource):
     @jwt_required()
     def post(self, id):
         """Close a open ticket"""
-        logging.debug("POST request at: /tickets/id/actions/close")
-        logging.debug(f"Request parameter: {id}")
+        logging.info(f"[ENDPOINT][TICKET] POST request at: /tickets/{id}/actions/close")
 
         response = close_ticket_usecase(self._repository, id)
-        logging.debug(f"Response from usecase: {response}")
+        logging.debug(f"[ENDPOINT][TICKET] response from close ticket use case: {response}")
 
-        return {
-            "Status": f"{response.status}",
-            "Result": response.result,
-        }, response.http_code
+        return cook_response(raw_response=response)

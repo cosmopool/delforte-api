@@ -8,4 +8,4 @@ class TicketSchema(Schema):
     clientPhone = fields.Int(required=True)
     serviceType = fields.Str(required=True)
     description = fields.Str(required=True)
-    isFinished = fields.Boolean(default=False)
+    isFinished = fields.Boolean(default=False, required=False)

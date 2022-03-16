@@ -1,5 +1,6 @@
 import pytest
 from zione.core.enums import Status
+from zione.core.exceptions import MissingFieldError, ValidationError
 from zione.domain.entities.response import Response
 
 
@@ -48,3 +49,31 @@ def test_to_dict_non_capitalized_keys_should_not_exist():
 
     with pytest.raises(KeyError):
         assert res['status']
+
+def test_not_authorized_method():
+    msg = "hash"
+    res = Response.not_authorized(msg)
+
+    assert res.status == Status.Error
+    assert msg in res.message
+
+def test_authorized_method():
+    msg = "01293hw98sdh20981"
+    res = Response.authorized(msg)
+
+    assert res.status == Status.Success
+    assert msg in res.result[0]
+
+def test_validation_error_method():
+    err = ValidationError()
+    res = Response.missing_field(err)
+
+    assert res.status == Status.Error
+    assert "validating" in res.message.lower()
+
+def test_missing_field_method():
+    err = MissingFieldError()
+    res = Response.missing_field(err)
+
+    assert res.status == Status.Error
+    assert "missing" in res.message

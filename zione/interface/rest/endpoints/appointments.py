@@ -8,12 +8,12 @@ from flask_jwt_extended import jwt_required
 from zione.domain.repository_interface import RepositoryInterface
 from zione.domain.usecases.add_appointment import add_appointment_usecase
 from zione.domain.usecases.close_appointment import close_appointment_usecase
+from zione.domain.usecases.delete_appointment import delete_appointment_usecase
 from zione.domain.usecases.edit_appointment import edit_appointment_usecase
 from zione.domain.usecases.fetch_appointment import fetch_appointment_usecase
-from zione.domain.usecases.fetch_open_appointments import (
-    fetch_open_appointments_usecase,
-)
+from zione.domain.usecases.fetch_open_appointments import fetch_open_appointments_usecase
 from zione.domain.usecases.reschedule_appointment import reschedule_appointment_usecase
+from zione.interface.utils.response import cook_response
 
 
 @dataclass
@@ -22,30 +22,24 @@ class AppointmentOpen(Resource):
 
     @jwt_required()
     def get(self):
-        """get all open appointments"""
-        response = fetch_open_appointments_usecase(self._repository)
-        logging.debug("Response from usecase: {response}")
-        logging.debug("GET request at: /appointments/")
+        """Get all open appointments"""
+        logging.info("[ENDPOINT][APPOINTMENT] GET request at: /appointments... calling use case")
 
-        return {
-            "Status": f"{response.status}",
-            "Result": response.result,
-        }, response.http_code
+        response = fetch_open_appointments_usecase(self._repository)
+        logging.debug(f"[ENDPOINT][APPOINTMENT] response from fetch open appointments use case: {response}")
+
+        return cook_response(raw_response=response)
 
     @jwt_required()
     def post(self):
         """Book a new appointment"""
+        logging.info("[ENDPOINT][APPOINTMENT] POST request at: /appointments... calling use case")
+
         entry = json.loads(request.data)
-        logging.debug("POST request at: /appointments/")
-        logging.debug(f"Request data: {request.data}")
-
         response = add_appointment_usecase(self._repository, entry)
-        logging.debug(f"Response from usecase: {response}")
+        logging.debug(f"[ENDPOINT][APPOINTMENT] response from add appointment use case: {response}")
 
-        return {
-            "Status": f"{response.status}",
-            "Result": response.result,
-        }, response.http_code
+        return cook_response(raw_response=response)
 
 
 @dataclass
@@ -55,46 +49,33 @@ class Appointments(Resource):
     @jwt_required()
     def get(self, id):
         """Get information about specific appointment"""
-        logging.debug("GET request at: /appointments/id")
-        logging.debug(f"Request parameter: {id}")
+        logging.info("[ENDPOINT][APPOINTMENT] GET request at: /appointments... calling use case")
 
         response = fetch_appointment_usecase(self._repository, id)
-        logging.debug(f"Response from usecase: {response}")
+        logging.debug(f"[ENDPOINT][APPOINTMENT] response from fetch appointment use case: {response}")
 
-        return {
-            "Status": f"{response.status}",
-            "Result": response.result,
-        }, response.http_code
+        return cook_response(raw_response=response)
 
     @jwt_required()
     def patch(self, id):
         """Edit a specific appointment"""
         entry = json.loads(request.data)
-        logging.debug("PATCH request at: /appointments/id")
-        logging.debug(f"Request parameter: {id}")
-        logging.debug(f"Request data: {request.data}")
+        logging.info("[ENDPOINT][APPOINTMENT] PATCH request at: /appointments... calling use case")
 
-        response = edit_appointment_usecase(self._repository, entry)
-        logging.debug(f"Response from usecase: {response}")
+        response = edit_appointment_usecase(self._repository, entry, id)
+        logging.debug(f"[ENDPOINT][APPOINTMENT] response from edit appointment use case: {response}")
 
-        return {
-            "Status": f"{response.status}",
-            "Result": response.result,
-        }, response.http_code
+        return cook_response(raw_response=response)
 
     @jwt_required()
     def delete(self, id):
         """Delete a specific appointment"""
-        logging.debug("DELETE request at: /appointments/id")
-        logging.debug(f"Request parameter: {id}")
+        logging.info("[ENDPOINT][APPOINTMENT] DELETE request at: /appointments... calling use case")
 
-        response = edit_appointment_usecase(self._repository, id)
-        logging.debug(f"Response from usecase: {response}")
+        response = delete_appointment_usecase(self._repository, id)
+        logging.debug(f"[ENDPOINT][APPOINTMENT] response from delete appointment use case: {response}")
 
-        return {
-            "Status": f"{response.status}",
-            "Result": response.result,
-        }, response.http_code
+        return cook_response(raw_response=response)
 
 
 @dataclass
@@ -104,16 +85,12 @@ class AppointmentsActionsClose(Resource):
     @jwt_required()
     def post(self, id):
         """Close a open appointment"""
-        logging.debug("POST request at: /appointments/id/actions/close")
-        logging.debug(f"Request parameter: {id}")
+        logging.info("[ENDPOINT][APPOINTMENT] POST request at: /appointments... calling use case")
 
         response = close_appointment_usecase(self._repository, id)
-        logging.debug(f"Response from usecase: {response}")
+        logging.debug(f"[ENDPOINT][APPOINTMENT] response from close appointment use case: {response}")
 
-        return {
-            "Status": f"{response.status}",
-            "Result": response.result,
-        }, response.http_code
+        return cook_response(raw_response=response)
 
 
 @dataclass
@@ -124,14 +101,9 @@ class AppointmentsActionsReschedule(Resource):
     def post(self, id):
         """Reschedule a specific appointment to a new date"""
         entry = json.loads(request.data)
-        logging.debug("PATCH request at: /appointments/id/actions/reschedule")
-        logging.debug(f"Request parameter: {id}")
-        logging.debug(f"Request data: {request.data}")
+        logging.info("[ENDPOINT][APPOINTMENT] POST request at: /appointments... calling use case")
 
         response = reschedule_appointment_usecase(self._repository, entry, id)
-        logging.debug(f"Response from usecase: {response}")
+        logging.debug(f"[ENDPOINT][APPOINTMENT] response from reschedule appointment use case: {response}")
 
-        return {
-            "Status": f"{response.status}",
-            "Result": response.result,
-        }, response.http_code
+        return cook_response(raw_response=response)

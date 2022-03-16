@@ -1,5 +1,6 @@
+import logging
+
 from zione.core.enums import Status
-from zione.core.exceptions import InvalidValueError
 from zione.domain.entities.response import Response
 from zione.domain.entities.appointment import Appointment
 from zione.domain.usecases.close_appointment import close_appointment_usecase
@@ -34,19 +35,27 @@ class TestCloseAppointmentUsecase:
         res = close_appointment_usecase(repo_stub, -4)
 
         assert res.status == Status.Error
-        assert res.http_code == 406
+        assert res.http_code == 412
 
-    def test_string_instead_of_int(self, repo_stub):
+    def test_invalid_string(self, repo_stub):
+        res = close_appointment_usecase(repo_stub, "a")
+        print(res)
+
+        assert res.status == Status.Error
+        assert "invalid character" in res.message.lower()
+
+    def test_send_integer_as_string(self, repo_stub):
         res = close_appointment_usecase(repo_stub, "1")
 
-        assert res.error == InvalidValueError()
-        assert "Invalid field value" in res.message
+        assert res.status == Status.Success
 
-    def test_None_instead_of_int(self, repo_stub):
+    def test_None_instead_of_int(self, repo_stub, caplog):
+        caplog.set_level(logging.DEBUG)
         res = close_appointment_usecase(repo_stub, None)
 
         assert res.status == Status.Error
-        assert "Invalid field value" in res.message
+        assert "not" in res.message.lower()
+        assert "nonetype" in res.message.lower()
 
     def test_valid_dict_should_return_http_cod_200(self, repo_stub):
         res = close_appointment_usecase(repo_stub, self.ap.id)

@@ -45,7 +45,8 @@ class TestAddUserUsecase:
             self.user_dict.pop("password")
         res = add_user_usecase(repo_stub, self.user_dict)
 
-        assert "missing 1 required positional argument" in res.message
+        assert "missing" in res.message.lower()
+        assert "required field" in res.message.lower()
 
     def test_dict_with_missings_fields_should_return_status_error(self, repo_stub):
         user_dict = self.user_dict

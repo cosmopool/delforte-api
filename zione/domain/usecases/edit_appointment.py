@@ -1,25 +1,33 @@
-from zione.core.enums import Status
-from zione.core.exceptions import MissingFieldError
+import logging
+
+from zione.core.exceptions import InvalidValueError
+from zione.core.utils.int_utils import validate_id
 from zione.domain.entities.appointment import Appointment
 from zione.domain.entities.response import Response
 from zione.domain.repository_interface import RepositoryInterface
-from zione.infra.schemas.appointments import AppointmentSchema
 
 
-def edit_appointment_usecase(repo: RepositoryInterface, entry: dict):
+def edit_appointment_usecase(repo: RepositoryInterface, entry: dict, id: int) -> Response:
     """
     Add an appointment.
     Receives an entry, validates it's fields by deserializing and then passes to the repository.
     """
+    logging.info("[EDIT][TICKET] initiating ticket edit")
 
     try:
-        record = AppointmentSchema(partial=True).load(entry)
+        validate_id(id)
+
+        logging.info(f"[EDIT][TICKETS] setting entry id: {id}")
+        entry['id'] = int(id)
+
+    except InvalidValueError as e:
+        logging.error(f"[EDIT][TICKET] an generic error occurred: {e}")
+        return Response.invalid_value("id")
+
     except Exception as e:
-        return Response(
-            status=Status.Error,
-            http_code=406,
-            error=MissingFieldError(),
-            message=e.__str__(),
-        )
+        logging.error(f"[EDIT][TICKET] an generic error occurred: {e}")
+        return Response.generic_error(e)
+
     else:
-        return repo.update(record, Appointment.endpoint)
+        logging.info("[EDIT][TICKET] all requirements present, sending update request to database...")
+        return repo.update(entry, Appointment.endpoint)

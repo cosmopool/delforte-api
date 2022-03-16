@@ -1,3 +1,4 @@
+import logging
 import pytest
 
 from zione.domain.entities.response import Response
@@ -19,7 +20,10 @@ def test_insert_valid_ticket(repo, tk):
 
 @pytest.mark.integration
 @pytest.mark.db_insert
-def test_insert_valid_appointment(repo, ap):
+def test_insert_valid_appointment(repo, ap, caplog):
+    caplog.set_level(logging.DEBUG)
+    logging.debug(f"ap {ap}")
     res = repo.insert(ap, "appointments")
+    logging.debug(f"res {res}")
 
     assert res.result[0] > 0

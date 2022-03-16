@@ -1,4 +1,5 @@
-from zione.core.enums import Status
+import logging
+
 from zione.core.exceptions import InvalidValueError
 from zione.core.utils.int_utils import validate_id
 from zione.domain.entities.response import Response
@@ -11,14 +12,19 @@ def close_ticket_usecase(repo: RepositoryInterface, id: int):
     Closes an ticket.
     Receives an id and then sends a query to repository.
     """
-    id_is_valid = validate_id(id)
+    logging.info("[CLOSE][APPOINTMENT] initiating ticket close")
 
-    if id_is_valid:
-        return repo.update({"id": f"{id}", "isFinished": "true"}, Ticket.endpoint)
+    try:
+        validate_id(id)
+
+    except InvalidValueError as e:
+        logging.error(f"[CLOSE][APPOINTMENT] invalid value passed to id: {id}")
+        return Response.invalid_value("id")
+
+    except Exception as e:
+        logging.error(f"[CLOSE][APPOINTMENT] an generic error occurred: {e}")
+        return Response.generic_error(e)
+
     else:
-        return Response(
-            status=Status.Error,
-            http_code=406,
-            message="Invalid field value: 'id'",
-            error=InvalidValueError(),
-        )
+        logging.info("[CLOSE][APPOINTMENT] all requirements present, sending update request to database...")
+        return repo.update({"id": f"{id}", "isFinished": "true"}, Ticket.endpoint)

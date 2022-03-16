@@ -10,6 +10,6 @@ class Ticket(Entity):
     clientPhone: int
     serviceType: str
     description: str
-    isFinished: bool
+    isFinished: bool = False
     id: int = -1
     endpoint = "tickets"

@@ -50,7 +50,9 @@ class TestAddAppointmentUsecase:
             self.ap_dict.pop("date")
         res = add_appointment_usecase(repo_stub, self.ap_dict)
 
-        assert res.message == "{'date': ['Missing data for required field.']}"
+        assert "date" in res.message.lower()
+        assert "missing" in res.message.lower()
+        assert "required field" in res.message.lower()
 
     def test_dict_with_missings_fields_should_return_status_error(self, repo_stub):
         ap_dict = self.ap_dict

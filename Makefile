@@ -10,3 +10,7 @@ init-db:
 
 test:
 	pytest -vv --cov . .
+
+build:
+	podman build --layers --force-rm --tag zione-api .
+	podman build --layers --force-rm --tag api_nginx -f container/nginx/.
