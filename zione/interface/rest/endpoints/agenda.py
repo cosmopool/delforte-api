@@ -17,7 +17,8 @@ class Agenda(Resource):
 
     @jwt_required()
     def get(self):
-        logging.info("[ENDPOINT][AGENDA] get request at: /agenda")
+        logging.info("[ENDPOINT][AGENDA] GET request at: /agenda")
+        logging.debug(f"[ENDPOINT][AGENDA] request data: {request.data}")
 
         response = fetch_agenda_usecase(self._repository)
         logging.debug(f"[ENDPOINT][AGENDA] response from fetch_agenda_usecase: {response}")

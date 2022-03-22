@@ -19,7 +19,7 @@ class Response:
         return cls(
             status=Status.Error,
             http_code=406,
-            message=f"One or more error occured: {err_msg}",
+            message=f"One or more missing fields: {err_msg}",
             error=MissingFieldError(),
         )
     
@@ -28,7 +28,7 @@ class Response:
         return cls(
             status=Status.Error,
             http_code=406,
-            message=f"One or more error occured: {err_msg}",
+            message=f"One or more error occured validating the data sent: {err_msg}",
             error=InvalidValueError(),
         )
 
