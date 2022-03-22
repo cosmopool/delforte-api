@@ -37,5 +37,5 @@
 
   CREATE VIEW appointments_view AS SELECT id, date, time, duration, ticket_id AS "ticketId", is_finished AS "isFinished" FROM appointments;
   CREATE VIEW tickets_view AS SELECT id, client_name AS "clientName", client_phone AS "clientPhone", client_address AS "clientAddress", service_type AS "serviceType", description, is_finished AS "isFinished" FROM tickets;
-  CREATE VIEW agenda_view AS SELECT t1.id, t1.date, t1.time, t1.duration, t1.is_finished AS "isFinished", t2.id AS "ticketId", t2.client_name AS "clientName", t2.client_address AS "clientAddress", t2.client_phone AS "clientPhone", t2.description, t2.is_finished AS "ticketIsFinished" FROM appointments AS t1 LEFT JOIN tickets AS t2 ON t1.ticket_id = t2.id;
+  CREATE VIEW agenda_view AS SELECT t1.id, t1.date, t1.time, t1.duration, t1.is_finished AS "isFinished", t2.id AS "ticketId", t2.client_name AS "clientName", t2.client_address AS "clientAddress", t2.client_phone AS "clientPhone", t2.service_type AS "serviceType", t2.description, t2.is_finished AS "ticketIsFinished" FROM appointments AS t1 LEFT JOIN tickets AS t2 ON t1.ticket_id = t2.id;
 

@@ -3,7 +3,7 @@ FROM tiangolo/meinheld-gunicorn-flask:python3.9
 COPY ./zione/ /app/zione/
 COPY ./main.py /app
 COPY ./setup.py /app
-COPY ./gunicorn_conf.py /
+# COPY ./gunicorn_conf.py /
 COPY ./requirements/prod-req.txt /app/requirements.txt
 
 ENV APP_MODULE "main:app"
