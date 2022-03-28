@@ -1,8 +1,7 @@
 import json
 import logging
 from flask import request
-from dataclasses import dataclass
-from flask_restful import Resource
+from flask_restx import Resource
 from flask_jwt_extended import create_access_token
 from zione.core.enums import Status
 
@@ -10,9 +9,12 @@ from zione.domain.usecases.authenticate_user import authenticate_user_usecase
 from zione.domain.repository_interface import RepositoryInterface
 
 
-@dataclass
+# @dataclass
 class UserAuthenticate(Resource):
     _repository: RepositoryInterface
+
+    def __init__(self, *args, **kwargs):
+        self._repository = kwargs['_repository']
 
     def post(self):
         """Authenticate a user given a username and password"""

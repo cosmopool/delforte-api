@@ -1,15 +1,29 @@
 import logging
 
 from flask import Flask
-from flask_restful import Api
-from flask_jwt_extended import JWTManager
+from flask_restx import Api
+from flask_jwt_extended.jwt_manager import JWTManager
+from flask_jwt_extended.exceptions import JWTExtendedException
+from jwt.exceptions import PyJWTError
 from marshmallow.fields import String
-
 from zione.core.dependency_injection import make_repository
+
 from zione.core.settings import ProdConfig
+from zione.domain.repository_interface import RepositoryInterface
+from zione.infra.repositories.postgres_repository import PostgresRepository
+from zione.interface.rest import endpoints
 from zione.interface.rest.endpoints.agenda import Agenda
-from zione.interface.rest.endpoints.appointments import AppointmentOpen, Appointments, AppointmentsActionsClose, AppointmentsActionsReschedule
-from zione.interface.rest.endpoints.tickets import TicketOpen, Tickets, TicketsActionsClose
+from zione.interface.rest.endpoints.appointments import (
+    AppointmentOpen,
+    Appointments,
+    AppointmentsActionsClose,
+    AppointmentsActionsReschedule,
+)
+from zione.interface.rest.endpoints.tickets import (
+    TicketOpen,
+    Tickets,
+    TicketsActionsClose,
+)
 from zione.interface.rest.endpoints.users import UserAuthenticate
 
 
@@ -21,38 +35,35 @@ def create_app(config_object=ProdConfig):
     app = Flask(__name__)
     logging.basicConfig(level=config_object.LOG_LEVEL)
     app.config.from_object(config_object)
-    jwt = JWTManager(app)
-    repo = {"_repository": make_repository(app)}
 
-    @jwt.invalid_token_loader
-    @jwt.unauthorized_loader
-    def my_unauthorized_loader(err: String):
+    repo = {"_repository": PostgresRepository(app.config["CONNECTION"])}
+    # repo = [make_repository(app)]
+
+    _ = JWTManager(app)
+    api = Api(app)
+
+    @api.errorhandler(JWTExtendedException)
+    @api.errorhandler(PyJWTError)
+    def handle_jwt_exceptions(err: String):
         return {"Status": "Error", "Result": f"Authentication token error: {err}"}, 401
 
-    @jwt.needs_fresh_token_loader
-    @jwt.revoked_token_loader
-    @jwt.expired_token_loader
-    @jwt.token_verification_failed_loader
-    def my_expired_token_callback(jwt_header: dict, jwt_payload: dict):
-        return {"Status": "Error", "Result": f"Authentication token error. {jwt_header}. {jwt_payload}"}, 401
+    register_agenda_endpoints(api, repo)
+    register_tickets_endpoints(api, repo)
+    register_appointments_endpoints(api, repo)
+    register_users_endpoints(api, repo)
 
-    register_agenda_endpoints(app, repo)
-    register_tickets_endpoints(app, repo)
-    register_appointments_endpoints(app, repo)
-    register_users_endpoints(app, repo)
-
+    api.init_app(app, add_specs=False)
     return app
 
 
-def register_agenda_endpoints(app: Flask, repo: dict):
+def register_agenda_endpoints(api: Api, repo: dict):
     """Register all agenda endpoints"""
-    api = Api(app)
     api.add_resource(Agenda, "/agenda", resource_class_kwargs=repo)
+    # api.add_resource(Agenda, "/agenda", {"_repository": make_repository(app)})
 
 
-def register_tickets_endpoints(app: Flask, repo: dict):
+def register_tickets_endpoints(api: Api, repo: dict):
     """Register all tickets endpoints"""
-    api = Api(app)
     api.add_resource(TicketOpen, "/tickets", resource_class_kwargs=repo)
     api.add_resource(Tickets, "/tickets/<string:id>", resource_class_kwargs=repo)
     api.add_resource(
@@ -62,9 +73,8 @@ def register_tickets_endpoints(app: Flask, repo: dict):
     )
 
 
-def register_appointments_endpoints(app: Flask, repo: dict):
+def register_appointments_endpoints(api: Api, repo: dict):
     """Register all appointments endpoints"""
-    api = Api(app)
     api.add_resource(AppointmentOpen, "/appointments", resource_class_kwargs=repo)
     api.add_resource(
         Appointments, "/appointments/<string:id>", resource_class_kwargs=repo
@@ -81,7 +91,6 @@ def register_appointments_endpoints(app: Flask, repo: dict):
     )
 
 
-def register_users_endpoints(app: Flask, repo: dict):
+def register_users_endpoints(api: Api, repo: dict):
     """Register all users endpoints"""
-    api = Api(app)
     api.add_resource(UserAuthenticate, "/login", resource_class_kwargs=repo)

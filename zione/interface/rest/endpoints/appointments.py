@@ -1,8 +1,7 @@
 import json
 import logging
 from flask import request
-from dataclasses import dataclass
-from flask_restful import Resource
+from flask_restx import Resource
 from flask_jwt_extended import jwt_required
 
 from zione.domain.repository_interface import RepositoryInterface
@@ -16,9 +15,11 @@ from zione.domain.usecases.reschedule_appointment import reschedule_appointment_
 from zione.interface.utils.response import cook_response
 
 
-@dataclass
 class AppointmentOpen(Resource):
     _repository: RepositoryInterface
+
+    def __init__(self, *args, **kwargs):
+        self._repository = kwargs['_repository']
 
     @jwt_required()
     def get(self):
@@ -42,9 +43,11 @@ class AppointmentOpen(Resource):
         return cook_response(raw_response=response)
 
 
-@dataclass
 class Appointments(Resource):
     _repository: RepositoryInterface
+
+    def __init__(self, *args, **kwargs):
+        self._repository = kwargs['_repository']
 
     @jwt_required()
     def get(self, id):
@@ -78,9 +81,11 @@ class Appointments(Resource):
         return cook_response(raw_response=response)
 
 
-@dataclass
 class AppointmentsActionsClose(Resource):
     _repository: RepositoryInterface
+
+    def __init__(self, *args, **kwargs):
+        self._repository = kwargs['_repository']
 
     @jwt_required()
     def post(self, id):
@@ -93,9 +98,11 @@ class AppointmentsActionsClose(Resource):
         return cook_response(raw_response=response)
 
 
-@dataclass
 class AppointmentsActionsReschedule(Resource):
     _repository: RepositoryInterface
+
+    def __init__(self, *args, **kwargs):
+        self._repository = kwargs['_repository']
 
     @jwt_required()
     def post(self, id):

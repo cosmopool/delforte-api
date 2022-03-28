@@ -7,7 +7,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'Flask==2.0.3',
-        'Flask-RESTful==0.3.9',
+        'flask-restx==0.5.1',
         'marshmallow==3.14.1',
         'psycopg==3.0.9',
         'psycopg[binary]',

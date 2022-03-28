@@ -207,6 +207,8 @@ class TestCloseTicket:
 
         res_get = client.get(f"tickets/{tk_id}", headers=headers)
         tk = res_get.json['Result'][0]
+        print(f"------------------- res_get {res_get.json}")
+        print(f"------------------- tk {tk}")
 
         assert status == "Success"
         assert tk['isFinished'] == True

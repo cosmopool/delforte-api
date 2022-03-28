@@ -60,6 +60,7 @@ class DevConfig(Config):
 
     # log
     LOG_LEVEL = logging.DEBUG
+    SSL_CONTEXT = True
 
 
 class TestConfig(Config):
