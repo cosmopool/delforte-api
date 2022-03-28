@@ -3,6 +3,7 @@ import logging
 from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
+from marshmallow.fields import String
 
 from zione.core.dependency_injection import make_repository
 from zione.core.settings import ProdConfig
@@ -20,8 +21,20 @@ def create_app(config_object=ProdConfig):
     app = Flask(__name__)
     logging.basicConfig(level=config_object.LOG_LEVEL)
     app.config.from_object(config_object)
-    _ = JWTManager(app)
+    jwt = JWTManager(app)
     repo = {"_repository": make_repository(app)}
+
+    @jwt.invalid_token_loader
+    @jwt.unauthorized_loader
+    def my_unauthorized_loader(err: String):
+        return {"Status": "Error", "Result": f"Authentication token error: {err}"}, 401
+
+    @jwt.needs_fresh_token_loader
+    @jwt.revoked_token_loader
+    @jwt.expired_token_loader
+    @jwt.token_verification_failed_loader
+    def my_expired_token_callback(jwt_header: dict, jwt_payload: dict):
+        return {"Status": "Error", "Result": f"Authentication token error. {jwt_header}. {jwt_payload}"}, 401
 
     register_agenda_endpoints(app, repo)
     register_tickets_endpoints(app, repo)
